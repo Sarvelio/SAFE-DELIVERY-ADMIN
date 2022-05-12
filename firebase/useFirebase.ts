@@ -8,6 +8,8 @@ import {
   getDoc,
   updateDoc,
   deleteDoc,
+  query,
+  where,
 } from "firebase/firestore";
 import db from "./configFirebase";
 
@@ -15,17 +17,24 @@ type ICollection = "users" | "usuarios";
 interface IUseFirebase {
   _collection: ICollection;
   _id?: string;
-  leer?: boolean;
+  read?: boolean;
+  unique?: string[];
 }
-const useFirebase = ({ _collection, _id, leer = false }: IUseFirebase) => {
+const useFirebase = ({
+  _collection,
+  _id,
+  read = false,
+  unique = [],
+}: IUseFirebase) => {
   const [data, setDataReceive] = useState<[]>([]);
-  const [loading, setLoading] = useState(leer);
+  const [loading, setLoading] = useState(read);
   const [refresh, setRefresh] = useState(true);
   const [loadingCUD, setLoadingCUD] = useState(false);
+  const [errorData, setErrorData] = useState("");
   const router = useRouter();
 
   useEffect(() => {
-    if (refresh && leer) {
+    if (refresh && read) {
       setLoading(true);
       setRefresh(false);
       let _data;
@@ -57,14 +66,23 @@ const useFirebase = ({ _collection, _id, leer = false }: IUseFirebase) => {
     const _doc = await getDoc(doc(db, _collection, _id!));
     return { id: _doc.id, ..._doc.data() };
   };
-  const createData = async (newData: any) => {
+  const createData = async (newData: {}) => {
     const _doc = await addDoc(collection(db, _collection), newData);
   };
-  const updateDataByID = async (newData: any) => {
+  const updateDataByID = async (newData: {}) => {
     const _doc = await updateDoc(doc(db, _collection, _id!), newData);
   };
   const deleteDataById = async (_idDelete: string) => {
     const _doc = await deleteDoc(doc(db, _idDelete, _idDelete));
+  };
+  const getDataUnique = async (newData: {}, unique: string): Promise<{}> => {
+    const _doc = await getDocs(
+      query(
+        collection(db, _collection), // @ts-ignore
+        where(unique, "==", newData[unique])
+      )
+    );
+    return _doc.size > 0;
   };
 
   const deleteData = (
@@ -94,24 +112,55 @@ const useFirebase = ({ _collection, _id, leer = false }: IUseFirebase) => {
     callBack?: () => void,
     callBackError?: () => void
   ) => {
+    const _sendData = () => {
+      let _data;
+      if (_id) {
+        _data = updateDataByID(newData);
+      } else {
+        _data = createData(newData);
+      }
+      _data
+        .then((e) => {
+          if (callBack) callBack();
+        })
+        .catch((error) => {
+          console.log("--error--", error);
+          if (callBackError) callBackError();
+        })
+        .finally(() => {
+          setLoadingCUD(false);
+          if (errorData) setErrorData("");
+        });
+    };
+
     setLoadingCUD(true);
-    let _data;
-    if (_id) {
-      _data = updateDataByID(newData);
+    if (unique.length > 0) {
+      const _promise = [];
+      for (let i = 0; i < unique.length; i++) {
+        _promise.push(
+          getDataUnique(newData, unique[i]).then((a) => {
+            if (a) {
+              setErrorData(`Ya existe un ${unique[i]} identico`);
+              return `Ya existe un ${unique[i]} identico`;
+            }
+          })
+        );
+      }
+      Promise.all(_promise)
+        .then((values) => {
+          if (!values.some((a) => !!a)) {
+            _sendData();
+          } else {
+            setLoadingCUD(false);
+          }
+        })
+        .catch((error) => {
+          console.log("--error--", error);
+          if (callBackError) callBackError();
+        });
     } else {
-      _data = createData(newData);
+      _sendData();
     }
-    _data
-      .then((e) => {
-        if (callBack) callBack();
-      })
-      .catch((error) => {
-        console.log("--error--", error);
-        if (callBackError) callBackError();
-      })
-      .finally(() => {
-        setLoadingCUD(false);
-      });
   };
 
   const navigateTo = (url: string) => {
@@ -126,6 +175,7 @@ const useFirebase = ({ _collection, _id, leer = false }: IUseFirebase) => {
     sendData,
     deleteData,
     navigateTo,
+    errorData,
   };
 };
 

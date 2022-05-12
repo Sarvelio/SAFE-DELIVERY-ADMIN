@@ -2,6 +2,7 @@ import type { NextPage } from "next";
 import db from "../firebase";
 import { useEffect } from "react";
 import Hola from "./Hola";
+
 const Home: NextPage = () => {
   return (
     <div>

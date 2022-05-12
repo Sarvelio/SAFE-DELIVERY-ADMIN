@@ -11,12 +11,12 @@ const Home = () => {
     navigateTo,
   } = useFirebase({
     _collection: "usuarios",
-    leer: true,
+    read: true,
   });
 
   return (
     <div>
-      <h1>{loadingCUD ? "Escribiendo" : "No leer"}</h1>
+      <h1>{loadingCUD ? "Escribiendo" : "No read"}</h1>
 
       <h1>{loading ? "cargando" : "se termino"}</h1>
 
@@ -42,8 +42,7 @@ const Home = () => {
               nombre: "Arlex roldan",
             },
             () => {
-              console.log("regrescar");
-              // setRefresh(true);
+              setRefresh(true);
             }
           );
         }}
