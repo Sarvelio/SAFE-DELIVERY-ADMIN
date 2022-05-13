@@ -12,6 +12,7 @@ import {
   where,
 } from "firebase/firestore";
 import db from "./configFirebase";
+import bcrypt from "bcryptjs";
 
 type ICollection = "users" | "usuarios";
 interface IUseFirebase {
@@ -179,7 +180,30 @@ const useFirebase = ({
   };
 };
 
+const FirebaseLogin = async (
+  email: string,
+  password: string
+): Promise<{} | null> => {
+  const _docs = await getDocs(
+    query(
+      collection(db, "usuarios"), // @ts-ignore
+      where("email", "==", email)
+    )
+  );
+  if (_docs.size > 0) {
+    const _user: { password?: string } = _docs.docs[0].data();
+    const pass = _user.password;
+    delete _user.password;
+    if (!bcrypt.compareSync(password, pass!)) {
+      return null;
+    }
+    return _user;
+  }
+  return null;
+};
+
 export {
+  FirebaseLogin,
   useFirebase,
   collection,
   addDoc,
