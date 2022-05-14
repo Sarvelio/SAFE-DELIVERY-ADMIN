@@ -21,9 +21,7 @@ const ListPage: NextPage = () => {
   });
   return (
     <div className="container">
-      <h1>Hola mundo</h1>
-      <h1>SAFE DELIVERY ADMIN</h1>
-      <div className="row">
+      <div className="row my-5">
         <div
           className="col-12 d-inline bg-light shadow px-0"
           style={{ height: "667px" }}

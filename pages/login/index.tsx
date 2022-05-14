@@ -18,12 +18,18 @@ import { useForm } from "react-hook-form";
 
 import { validations } from "../../utils";
 import { useRouter } from "next/router";
+import { Header } from "../../components/ui";
 
 type FormData = {
   email: string;
   password: string;
 };
-
+type IRes = {
+  error: string;
+  status: number;
+  ok: boolean;
+  url: string;
+};
 const LoginPage = () => {
   const router = useRouter();
 
@@ -37,78 +43,89 @@ const LoginPage = () => {
   const onLoginUser = async ({ email, password }: FormData) => {
     setShowError(false);
     await signIn("credentials", { email, password, redirect: false })
-      .then((e) => console.log(e))
-      .catch((error) => console.log("--error--", error));
+      .then((res) => {
+        // @ts-ignore
+        if (res.error) {
+          setShowError(true);
+          setTimeout(() => setShowError(false), 3000);
+        }
+        console.log("correcto", res);
+      })
+      .catch((error) => {
+        console.log("--error--", error);
+      });
   };
 
   return (
-    <div className="container">
-      <form onSubmit={handleSubmit(onLoginUser)} noValidate>
-        <Box sx={{ width: 350, padding: "10px 20px" }}>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <Typography variant="h1" component="h1">
-                Iniciar Sesión
-              </Typography>
-              <Chip
-                label="No reconocemos ese usuario / contraseña"
-                color="error"
-                icon={<ErrorOutline />}
-                className="fadeIn"
-                sx={{ display: showError ? "flex" : "none" }}
-              />
-            </Grid>
+    <>
+      <Header />
 
-            <Grid item xs={12}>
-              <TextField
-                type="email"
-                label="Correo"
-                variant="filled"
-                fullWidth
-                {...register("email", {
-                  required: "Este campo es requerido",
-                  validate: validations.isEmail,
-                })}
-                error={!!errors.email}
-                helperText={errors.email?.message}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                label="Contraseña"
-                type="password"
-                variant="filled"
-                fullWidth
-                {...register("password", {
-                  required: "Este campo es requerido",
-                  minLength: { value: 6, message: "Mínimo 6 caracteres" },
-                })}
-                error={!!errors.password}
-                helperText={errors.password?.message}
-              />
-            </Grid>
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="calc(100vh - 200px)"
+        sx={{ flexDirection: { xs: "column", sm: "row" } }}
+      >
+        <div className="container">
+          <form onSubmit={handleSubmit(onLoginUser)} noValidate>
+            {/* <Box sx={{ width: 350, padding: "10px 20px" }}>
+          <Grid container spacing={2}> */}
+            <div className="row">
+              <div style={{ maxWidth: "350px" }} className="mx-auto">
+                <Grid item xs={12}>
+                  <h1 className="fw-bold text-center my-5">Iniciar Sesión</h1>
+                  <Chip
+                    label="No reconocemos ese usuario / contraseña"
+                    color="error"
+                    icon={<ErrorOutline />}
+                    className="fadeIn mb-3"
+                    sx={{ display: showError ? "flex" : "none" }}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    type="email"
+                    label="Correo"
+                    variant="filled"
+                    fullWidth
+                    {...register("email", {
+                      required: "Este campo es requerido",
+                      validate: validations.isEmail,
+                    })}
+                    error={!!errors.email}
+                    helperText={errors.email?.message}
+                  />
+                </Grid>
+                <br />
+                <Grid item xs={12}>
+                  <TextField
+                    label="Contraseña"
+                    type="password"
+                    variant="filled"
+                    fullWidth
+                    {...register("password", {
+                      required: "Este campo es requerido",
+                      minLength: { value: 6, message: "Mínimo 6 caracteres" },
+                    })}
+                    error={!!errors.password}
+                    helperText={errors.password?.message}
+                  />
+                </Grid>
 
-            <Grid item xs={12}>
-              <Button
-                type="submit"
-                color="secondary"
-                className="circular-btn"
-                size="large"
-                fullWidth
-              >
-                Ingresar
-              </Button>
-            </Grid>
-
-            <Grid item xs={12} display="flex" justifyContent="end">
-              <NextLink href={"/publico"} passHref>
-                <Link underline="always">¿No tienes cuenta?</Link>
-              </NextLink>
-            </Grid>
-          </Grid>
-        </Box>
-      </form>
-    </div>
+                <div className="d-grid gap-2 mt-5">
+                  <button type="submit" className="btn btn-warning">
+                    Ingresar
+                  </button>
+                </div>
+              </div>
+            </div>
+            {/* </Grid>
+        </Box> */}
+          </form>
+        </div>
+      </Box>
+    </>
   );
 };
 

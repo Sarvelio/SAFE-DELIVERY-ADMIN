@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useAuth } from "../../context/";
-
+import { Sidebar, FullScreenLoading, SideMenu } from "../../components/ui";
 export function AuthGuard({
   children,
   lockedAfterLogin = false,
@@ -29,15 +29,11 @@ export function AuthGuard({
   }, [initializing, router, user, lockedAfterLogin, requireAuth]);
 
   if (initializing) {
-    return (
-      <div className="  bg-danger" style={{ width: "400px", height: "300px" }}>
-        <h1>Application Loading</h1>
-      </div>
-    );
+    return <FullScreenLoading />;
   } else {
     if (user) {
       if (!lockedAfterLogin) {
-        return <>{children}</>;
+        return <Sidebar>{children}</Sidebar>;
       }
     } else {
       if (!requireAuth) {
@@ -45,5 +41,5 @@ export function AuthGuard({
       }
     }
   }
-  return null;
+  return <FullScreenLoading />;
 }

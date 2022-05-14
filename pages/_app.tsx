@@ -16,10 +16,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           requireAuth={requireAuth}
           lockedAfterLogin={lockedAfterLogin}
         >
-          <>
-            <h2>protegio?g : {requireAuth ? "sii" : "noo"}</h2>
-            <Component {...pageProps} />
-          </>
+          <Component {...pageProps} />
         </AuthGuard>
       </AuthProvider>
     </SessionProvider>

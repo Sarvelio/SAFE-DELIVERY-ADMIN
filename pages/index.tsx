@@ -9,14 +9,7 @@ const Home: NextPage = () => {
 
   return (
     <div>
-      <h1>Hola mundo:{user?.nombre}</h1>
-      {isLoggedIn && (
-        <button className="btn btn-primary" onClick={logout}>
-          cerrar sesion
-        </button>
-      )}
-      <h1>SAFE DELIVERY ADMIN</h1>
-      <Hola />
+      <h1>Bienvenido: {user?.nombre}</h1>
     </div>
   );
 };
