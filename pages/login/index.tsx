@@ -36,7 +36,9 @@ const LoginPage = () => {
 
   const onLoginUser = async ({ email, password }: FormData) => {
     setShowError(false);
-    await signIn("credentials", { email, password });
+    await signIn("credentials", { email, password, redirect: false })
+      .then((e) => console.log(e))
+      .catch((error) => console.log("--error--", error));
   };
 
   return (
@@ -99,14 +101,7 @@ const LoginPage = () => {
             </Grid>
 
             <Grid item xs={12} display="flex" justifyContent="end">
-              <NextLink
-                href={
-                  router.query.p
-                    ? `/auth/register?p=${router.query.p}`
-                    : "/auth/register"
-                }
-                passHref
-              >
+              <NextLink href={"/publico"} passHref>
                 <Link underline="always">¿No tienes cuenta?</Link>
               </NextLink>
             </Grid>
@@ -117,23 +112,25 @@ const LoginPage = () => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({
-  req,
-  query,
-}) => {
-  const session = await getSession({ req });
+// export const getServerSideProps: GetServerSideProps = async ({
+//   req,
+//   query,
+// }) => {
+//   const session = await getSession({ req });
 
-  if (session) {
-    return {
-      redirect: {
-        destination: "/",
-        permanent: false,
-      },
-    };
-  }
-  return {
-    props: {},
-  };
-};
+//   if (session) {
+//     return {
+//       redirect: {
+//         destination: "/",
+//         permanent: false,
+//       },
+//     };
+//   }
+//   return {
+//     props: {},
+//   };
+// };
+LoginPage.requireAuth = false;
+LoginPage.lockedAfterLogin = true;
 
 export default LoginPage;

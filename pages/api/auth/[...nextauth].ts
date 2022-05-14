@@ -32,7 +32,7 @@ export default NextAuth({
   // Custom Pages
   pages: {
     signIn: "/login",
-    newUser: "/",
+    newUser: "/register",
   },
 
   session: {
