@@ -17,7 +17,7 @@ import { AuthContext } from "../../context/auth";
 import Logo from "../../public/img/logo.jpg";
 import Image from "next/image";
 
-export const Sidebar = ({ children }) => {
+export const Sidebar = ({ children }: { children: JSX.Element }) => {
   const { user, isLoggedIn, logout } = useContext(AuthContext);
 
   return (

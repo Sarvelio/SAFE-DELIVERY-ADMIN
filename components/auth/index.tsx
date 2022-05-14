@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useAuth } from "../../context/";
-import { Sidebar, FullScreenLoading, SideMenu } from "../../components/ui";
+import { Sidebar, FullScreenLoading } from "../../components/ui";
 export function AuthGuard({
   children,
   lockedAfterLogin = false,
