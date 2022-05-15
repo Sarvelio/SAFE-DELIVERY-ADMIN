@@ -15,7 +15,7 @@ class MyDocument extends Document {
 
   render() {
     return (
-      <Html className="h-100 bg-primary">
+      <Html className="h-100">
         <Head>
           <link
             rel="stylesheet"
@@ -26,17 +26,15 @@ class MyDocument extends Document {
           <Main />
 
           <footer
-            className="container bg-blue py-0 my-0 text-center text-light mt-auto d-flex"
+            className="py-0 my-0 text-center text-light mt-auto "
             style={{ height: "60px" }}
           >
-            <div className="container d-flex justify-content-between my-auto">
+            <div className="mx-auto container-web d-flex justify-content-between my-auto bg-blue h-100 w-100 px-4 py-2">
               <div className="col-md-4 d-flex align-items-center">
                 <AddToQueueOutlined sx={{ fontSize: 25 }} />
-                <span className="mb-3 mb-md-0 text-white">
-                  © 2022 Company, UMG
-                </span>
+                <span className="mb-md-0 text-white">© 2022 Company, UMG</span>
               </div>
-              <ul className="nav col-md-4 justify-content-end list-unstyled d-flex">
+              <ul className="nav col-md-4 justify-content-end list-unstyled d-flex my-auto">
                 <li className="ms-3">
                   <FacebookOutlined sx={{ fontSize: 25 }} />
                 </li>

@@ -1,5 +1,5 @@
 import type { NextPage } from "next";
-import { useContext, useEffect, FC } from "react";
+import { useContext, useEffect, FC, useState } from "react";
 import {
   AppBar,
   Badge,
@@ -16,16 +16,27 @@ import NextLink from "next/link";
 import { AuthContext } from "../../context/auth";
 import Logo from "../../public/img/logo.jpg";
 import Image from "next/image";
+import { MenuOutlined } from "@mui/icons-material";
 
 export const Sidebar = ({ children }: { children: JSX.Element }) => {
   const { user, isLoggedIn, logout } = useContext(AuthContext);
+  const [openMenu, setOpenMenu] = useState(true);
 
   return (
-    <div className="container px-0">
-      <div className="d-flex" style={{ height: "calc(100vh - 58px)" }}>
-        <div style={{ width: "280px" }}>
+    <div className="container-web mx-auto px-0">
+      <div
+        className="d-flex bg-movil position-relative "
+        style={{ minHeight: "calc(100vh - 58px)" }}
+      >
+        <div
+          style={{
+            width: "280px",
+            minHeight: "calc(100vh - 58px) ",
+          }}
+          className={`d-none d-md-block ${openMenu ? "sidebar-active" : ""}`}
+        >
           <div
-            className="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark h-100"
+            className="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark h-100 "
             style={{ width: "280px" }}
           >
             <div className="text-center bg-white">
@@ -65,19 +76,43 @@ export const Sidebar = ({ children }: { children: JSX.Element }) => {
 
                 <strong className="ms-2">{user?.nombre}</strong>
               </a>
-              <Link>
-                <Button
-                  color={"info"}
-                  className="nav-link d-block text-center mt-4 mx-auto"
-                  onClick={logout}
-                >
-                  Cerrar sesión
-                </Button>
-              </Link>
+              <Button
+                color={"info"}
+                className="nav-link d-block text-center mt-4 mx-auto"
+                onClick={logout}
+              >
+                Cerrar sesión
+              </Button>
             </div>
           </div>
         </div>
-        <div className="px-2 w-100">{children}</div>
+        <div className="w-100">
+          <div className="d-md-none d-flex bg-blue">
+            <span
+              className="ms-auto p-2 bg-black text-white"
+              onClick={() => {
+                setOpenMenu(true);
+              }}
+            >
+              <MenuOutlined sx={{ fontSize: 35, fill: "white" }} />
+            </span>
+          </div>
+          <div
+            className=" w-100 container p-2 p-sm-3 p-md-4"
+            style={{ background: "#f6f6f6" }}
+          >
+            {children}
+          </div>
+        </div>
+        <div
+          className={` position-absolute h-100 w-100 d-none  ${
+            openMenu ? "sidebar-lock" : ""
+          }`}
+          onClick={() => {
+            setOpenMenu(false);
+          }}
+          style={{ background: "#00000038" }}
+        ></div>
       </div>
     </div>
   );

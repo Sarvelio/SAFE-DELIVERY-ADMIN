@@ -64,7 +64,7 @@ const LoginPage = () => {
         display="flex"
         justifyContent="center"
         alignItems="center"
-        height="calc(100vh - 200px)"
+        minHeight="calc(100vh - 200px)"
         sx={{ flexDirection: { xs: "column", sm: "row" } }}
       >
         <div className="container">

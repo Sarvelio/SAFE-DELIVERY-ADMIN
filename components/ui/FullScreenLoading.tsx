@@ -8,7 +8,7 @@ export const FullScreenLoading = () => {
       flexDirection="column"
       justifyContent="center"
       alignItems="center"
-      height="calc(100vh - 200px)"
+      minHeight="calc(100vh - 200px)"
     >
       <h1>Cargando...</h1>
       <CircularProgress thickness={2} />

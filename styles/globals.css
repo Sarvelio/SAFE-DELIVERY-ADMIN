@@ -19,3 +19,25 @@ a {
 .bg-blue {
   background: #212529;
 }
+
+.container-web {
+  max-width: 1320px;
+}
+.sidebar-lock {
+  display: none;
+}
+
+@media screen and (max-width: 767px) {
+  .bg-movil {
+    background: #f6f6f6;
+  }
+  .sidebar-active {
+    display: block !important;
+    position: absolute !important;
+    height: 100%;
+    z-index: 100;
+  }
+  .sidebar-lock {
+    display: block !important;
+  }
+}
