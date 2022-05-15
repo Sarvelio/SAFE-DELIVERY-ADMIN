@@ -1,27 +1,44 @@
 import type { NextPage } from "next";
 import { useContext, useEffect, FC, useState } from "react";
-import {
-  AppBar,
-  Badge,
-  Box,
-  Button,
-  IconButton,
-  Input,
-  InputAdornment,
-  Link,
-  Toolbar,
-  Typography,
-} from "@mui/material";
 import NextLink from "next/link";
 import { AuthContext } from "../../context/auth";
 import Logo from "../../public/img/logo.jpg";
 import Image from "next/image";
 import { MenuOutlined } from "@mui/icons-material";
+import {
+  Box,
+  Divider,
+  Drawer,
+  IconButton,
+  Input,
+  InputAdornment,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Button,
+  ListSubheader,
+} from "@mui/material";
+import { useRouter } from "next/router";
 
 export const Sidebar = ({ children }: { children: JSX.Element }) => {
   const { user, isLoggedIn, logout } = useContext(AuthContext);
   const [openMenu, setOpenMenu] = useState(true);
+  const { asPath } = useRouter();
 
+  const urls = [
+    { path: "/", name: "Inicio" },
+    { path: "/users", name: "Usuarios" },
+    { path: "/Hola", name: "Hola" },
+  ];
+  const validpath = (path: string) => {
+    if (path === "/") {
+      return path === asPath;
+    }
+    console.log("asPath", asPath);
+    console.log("path", path);
+    return asPath.startsWith(path);
+  };
   return (
     <div className="container-web mx-auto px-0">
       <div
@@ -36,7 +53,7 @@ export const Sidebar = ({ children }: { children: JSX.Element }) => {
           className={`d-none d-md-block ${openMenu ? "sidebar-active" : ""}`}
         >
           <div
-            className="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark h-100 "
+            className="d-flex flex-column flex-shrink-0 p-3 text-white bg-blue h-100 "
             style={{ width: "280px" }}
           >
             <div className="text-center bg-white">
@@ -44,52 +61,38 @@ export const Sidebar = ({ children }: { children: JSX.Element }) => {
             </div>
             <hr />
             <ul className="nav nav-pills flex-column mb-auto">
-              <li className="nav-item">
-                <NextLink href="/" passHref>
-                  <Link>
-                    <Button color={"info"} className="nav-link d-block">
-                      Inicio
-                    </Button>
-                  </Link>
-                </NextLink>
-              </li>
-              <li className="nav-item">
-                <NextLink href="/users" passHref>
-                  <Link>
-                    <Button color={"info"} className="nav-link d-block">
-                      Usuarios
-                    </Button>
-                  </Link>
-                </NextLink>
-              </li>
+              {urls.map(({ path, name }) => (
+                <li
+                  className={`nav-item  ${
+                    validpath(path) ? "nav-active" : "nav-not-active"
+                  }`}
+                  key={path + name}
+                >
+                  <NextLink href={path} passHref>
+                    <Button className="d-block pt-3 pb-2">{name}</Button>
+                  </NextLink>
+                </li>
+              ))}
             </ul>
             <hr />
             <div className="">
-              <a
-                href="#"
-                className="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
-                id="dropdownUser1"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                <Image src={Logo} alt="Logo" width={100} height={50} />
-
-                <strong className="ms-2">{user?.nombre}</strong>
-              </a>
-              <Button
-                color={"info"}
-                className="nav-link d-block text-center mt-4 mx-auto"
-                onClick={logout}
-              >
-                Cerrar sesión
-              </Button>
+              <strong className="ms-2">{user?.nombre}</strong>
+              <div className="d-grid gap-2">
+                <button
+                  className="btn text-danger mt-3"
+                  type="button"
+                  onClick={logout}
+                >
+                  Cerrar Sesión
+                </button>
+              </div>
             </div>
           </div>
         </div>
         <div className="w-100">
           <div className="d-md-none d-flex bg-blue">
             <span
-              className="ms-auto p-2 bg-black text-white"
+              className="ms-auto p-2 bg-blue text-white"
               onClick={() => {
                 setOpenMenu(true);
               }}

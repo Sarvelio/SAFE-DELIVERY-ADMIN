@@ -17,7 +17,7 @@ a {
   box-sizing: border-box;
 }
 .bg-blue {
-  background: #212529;
+  background: #162b4e;
 }
 
 .container-web {
@@ -40,4 +40,21 @@ a {
   .sidebar-lock {
     display: block !important;
   }
+}
+
+.nav-active {
+  background-color: white;
+}
+.nav-active > a {
+  color: #162b4e;
+  font-weight: bold !important;
+}
+
+.nav-not-active > a {
+  color: white;
+  font-weight: bold !important;
+}
+
+.nav-not-active > a:hover {
+  background-color: #243a60 !important;
 }
