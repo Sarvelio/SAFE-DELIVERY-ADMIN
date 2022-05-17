@@ -10,6 +10,7 @@ import {
 import { useFirebase } from "../../firebase";
 
 import NextLink from "next/link";
+import { ListLayout } from "../../components";
 import {
   AppBar,
   Badge,
@@ -34,35 +35,13 @@ const ListPage: NextPage = () => {
     read: true,
   });
   return (
-    <div className="container">
-      <div className="row my-5">
-        <div className="col-12 d-flex">
-          <span className="ms-auto my-3">
-            <NextLink href="/users/create" passHref>
-              <Link>
-                <Button color={"info"}>Crear usuario</Button>
-              </Link>
-            </NextLink>
-          </span>
-        </div>
-        <div
-          className="col-12 d-inline bg-light shadow px-0"
-          style={{ height: "667px" }}
-        >
-          <DataGrid
-            localeText={esES.components.MuiDataGrid.defaultProps.localeText}
-            rows={data}
-            columns={columns}
-            pageSize={10}
-            rowsPerPageOptions={[10]}
-            components={{
-              Toolbar: GridToolbar,
-            }}
-            loading={loading}
-          />
-        </div>
-      </div>
-    </div>
+    <ListLayout
+      title="Usuario"
+      loading={loading}
+      columns={columns}
+      data={data}
+      urlCreate="/users/create"
+    />
   );
 };
 

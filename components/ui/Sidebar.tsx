@@ -89,7 +89,7 @@ export const Sidebar = ({ children }: { children: JSX.Element }) => {
             </div>
           </div>
         </div>
-        <div className="w-100">
+        <div className="w-100" style={{ background: "#f6f6f6" }}>
           <div className="d-md-none d-flex bg-blue">
             <span
               className="ms-auto p-2 bg-blue text-white"
@@ -101,7 +101,7 @@ export const Sidebar = ({ children }: { children: JSX.Element }) => {
             </span>
           </div>
           <div
-            className=" w-100 container p-2 p-sm-3 p-md-4"
+            className=" w-100 container-web p-2 p-sm-3 p-md-4"
             style={{ background: "#f6f6f6" }}
           >
             {children}
