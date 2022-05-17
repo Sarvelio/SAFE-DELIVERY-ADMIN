@@ -4,6 +4,7 @@ import { SessionProvider } from "next-auth/react";
 import { AuthProvider } from "../context";
 import { useContext, useEffect, FC } from "react";
 import { AuthGuard } from "../components";
+import { UiProvider } from "../context/ui";
 
 function MyApp({ Component, pageProps }: AppProps) {
   // @ts-ignore
@@ -12,12 +13,14 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <SessionProvider>
       <AuthProvider>
-        <AuthGuard
-          requireAuth={requireAuth}
-          lockedAfterLogin={lockedAfterLogin}
-        >
-          <Component {...pageProps} />
-        </AuthGuard>
+        <UiProvider>
+          <AuthGuard
+            requireAuth={requireAuth}
+            lockedAfterLogin={lockedAfterLogin}
+          >
+            <Component {...pageProps} />
+          </AuthGuard>
+        </UiProvider>
       </AuthProvider>
     </SessionProvider>
   );

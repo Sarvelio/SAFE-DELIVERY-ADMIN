@@ -2,11 +2,11 @@ import { FC, useReducer } from "react";
 import { UiContext, uiReducer } from "./";
 
 export interface UiState {
-  isMenuOpen: boolean;
+  isLoading: boolean;
 }
 
 const UI_INITIAL_STATE: UiState = {
-  isMenuOpen: false,
+  isLoading: false,
 };
 
 interface IPro {
@@ -15,8 +15,12 @@ interface IPro {
 export const UiProvider: FC<IPro> = ({ children }) => {
   const [state, dispatch] = useReducer(uiReducer, UI_INITIAL_STATE);
 
-  const toggleSideMenu = () => {
-    dispatch({ type: "[UI] - ToggleMenu" });
+  const yesLoading = () => {
+    dispatch({ type: "[UI] - Loading", payload: true });
+  };
+
+  const noLoading = () => {
+    dispatch({ type: "[UI] - Loading", payload: false });
   };
 
   return (
@@ -25,7 +29,8 @@ export const UiProvider: FC<IPro> = ({ children }) => {
         ...state,
 
         // Methods
-        toggleSideMenu,
+        yesLoading,
+        noLoading,
       }}
     >
       {children}

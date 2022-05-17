@@ -1,21 +1,16 @@
-import { UiState } from './';
+import { UiState } from "./";
 
+type UiActionType = { type: "[UI] - Loading"; payload: boolean };
 
-type UiActionType = 
-   | { type: '[UI] - ToggleMenu' } 
+export const uiReducer = (state: UiState, action: UiActionType): UiState => {
+  switch (action.type) {
+    case "[UI] - Loading":
+      return {
+        ...state,
+        isLoading: action.payload,
+      };
 
-
-export const uiReducer = ( state: UiState, action: UiActionType ): UiState => {
-
-   switch (action.type) {
-      case '[UI] - ToggleMenu':
-         return {
-            ...state,
-            isMenuOpen: !state.isMenuOpen
-        }
-
-       default:
-          return state;
-   }
-
-}
+    default:
+      return state;
+  }
+};

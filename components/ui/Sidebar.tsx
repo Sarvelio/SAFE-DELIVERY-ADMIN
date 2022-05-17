@@ -20,11 +20,13 @@ import {
   ListSubheader,
 } from "@mui/material";
 import { useRouter } from "next/router";
+import { UiContext } from "../../context/ui";
 
 export const Sidebar = ({ children }: { children: JSX.Element }) => {
   const { user, isLoggedIn, logout } = useContext(AuthContext);
   const [openMenu, setOpenMenu] = useState(true);
   const { asPath } = useRouter();
+  const { isLoading } = useContext(UiContext);
 
   const urls = [
     { path: "/", name: "Inicio" },
@@ -49,6 +51,7 @@ export const Sidebar = ({ children }: { children: JSX.Element }) => {
           style={{
             width: "280px",
             minHeight: "calc(100vh - 58px) ",
+            zIndex: 2,
           }}
           className={`d-none d-md-block ${openMenu ? "sidebar-active" : ""}`}
         >
@@ -89,7 +92,10 @@ export const Sidebar = ({ children }: { children: JSX.Element }) => {
             </div>
           </div>
         </div>
-        <div className="w-100" style={{ background: "#f6f6f6" }}>
+        <div
+          className="w-100 position-relative"
+          style={{ background: "#f6f6f6" }}
+        >
           <div className="d-md-none d-flex bg-blue">
             <span
               className="ms-auto p-2 bg-blue text-white"
@@ -101,10 +107,31 @@ export const Sidebar = ({ children }: { children: JSX.Element }) => {
             </span>
           </div>
           <div
-            className=" w-100 container-web p-2 p-sm-3 p-md-4"
-            style={{ background: "#f6f6f6" }}
+            className="position-absolute h-100 w-100"
+            // style={{ display: "contents" }}
           >
-            {children}
+            <div
+              className={`position-absolute h-100 w-100 loading-spinner-div justify-content-center align-content-center ${
+                isLoading ? "d-flex" : "d-none"
+              }`}
+              onClick={() => {
+                setOpenMenu(false);
+              }}
+              style={{ background: "#00000025" }}
+            >
+              <div
+                className="spinner-border text-primary my-auto mx-auto  "
+                role="status"
+              >
+                <span className="visually-hidden">Loading...</span>
+              </div>
+            </div>
+            <div
+              className=" w-100 container-web p-2 p-sm-3 p-md-4"
+              style={{ background: "#f6f6f6" }}
+            >
+              {children}
+            </div>
           </div>
         </div>
         <div

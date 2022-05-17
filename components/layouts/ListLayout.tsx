@@ -23,7 +23,7 @@ export const ListLayout: FC<Props> = ({
     <div className="container-web py-3 px-3 px-sm-4 px-md-2">
       <div className="row ">
         <div className="col-12 d-flex">
-          <h4>{title}</h4>
+          <h3>{title}</h3>
         </div>
         {urlCreate && (
           <div className="col-12 d-flex">
@@ -35,7 +35,7 @@ export const ListLayout: FC<Props> = ({
           </div>
         )}
         <div
-          className="col-12 d-inline bg-light shadow px-0"
+          className="col-12 d-inline shadow px-0"
           style={{ height: "667px" }}
         >
           <DataGrid

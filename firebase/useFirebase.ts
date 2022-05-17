@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useRouter } from "next/router";
 import {
   collection,
@@ -13,6 +13,7 @@ import {
 } from "firebase/firestore";
 import db from "./configFirebase";
 import bcrypt from "bcryptjs";
+import { UiContext } from "../context/ui";
 
 type ICollection = "users" | "usuarios";
 interface IUseFirebase {
@@ -27,6 +28,8 @@ const useFirebase = ({
   read = false,
   unique = [],
 }: IUseFirebase) => {
+  const { yesLoading, noLoading } = useContext(UiContext);
+
   const [data, setDataReceive] = useState<[]>([]);
   const [loading, setLoading] = useState(read);
   const [refresh, setRefresh] = useState(true);
@@ -54,6 +57,14 @@ const useFirebase = ({
         });
     }
   }, [refresh]);
+
+  useEffect(() => {
+    if (loading || loadingCUD) {
+      yesLoading();
+    } else {
+      noLoading();
+    }
+  }, [loading, loadingCUD]);
 
   const getListData = async (): Promise<[]> => {
     const _docs = await getDocs(collection(db, _collection));

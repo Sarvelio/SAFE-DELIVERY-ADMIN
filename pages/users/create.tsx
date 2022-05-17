@@ -17,6 +17,7 @@ import { ErrorOutline } from "@mui/icons-material";
 import bcrypt from "bcryptjs";
 import { validations } from "../../utils";
 import { useFirebase } from "../../firebase";
+import { CreateLayout } from "../../components";
 
 type FormData = {
   name: string;
@@ -58,17 +59,11 @@ const CreatePage = () => {
   };
 
   return (
-    <div className="container">
+    <CreateLayout title={"Crear Usuario"}>
       <form onSubmit={handleSubmit(onRegisterForm)} noValidate>
-        {errorData && <h3>{errorData}</h3>}
-        <Box sx={{ width: 350, padding: "10px 20px" }}>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <Typography variant="h1" component="h1">
-                Crear cuenta
-              </Typography>
-            </Grid>
-            <Grid item xs={12}>
+        <div className="container-web-card ">
+          <div className="row">
+            <div className="col-sm-6 my-2 px-3 px-sm-1 px-md-1 px-lg-3">
               <TextField
                 label="Nombre completo"
                 variant="filled"
@@ -80,8 +75,8 @@ const CreatePage = () => {
                 error={!!errors.name}
                 helperText={errors.name?.message}
               />
-            </Grid>
-            <Grid item xs={12}>
+            </div>
+            <div className="col-sm-6 my-2 px-3 px-sm-1 px-md-1 px-lg-3">
               <TextField
                 type="email"
                 label="Correo"
@@ -94,8 +89,8 @@ const CreatePage = () => {
                 error={!!errors.email}
                 helperText={errors.email?.message}
               />
-            </Grid>
-            <Grid item xs={12}>
+            </div>
+            <div className="col-sm-6 my-2 px-3 px-sm-1 px-md-1 px-lg-3">
               <TextField
                 label="Contraseña"
                 type="password"
@@ -108,24 +103,26 @@ const CreatePage = () => {
                 error={!!errors.password}
                 helperText={errors.password?.message}
               />
-            </Grid>
+            </div>
+          </div>
+          {errorData && (
+            <div className="alert alert-danger mt-2 mb-0" role="alert">
+              {errorData}
+            </div>
+          )}
 
-            <Grid item xs={12}>
-              <Button
-                type="submit"
-                color="secondary"
-                className="circular-btn"
-                size="large"
-                fullWidth
-                disabled={loadingCUD}
-              >
-                Registrar
-              </Button>
-            </Grid>
-          </Grid>
-        </Box>
+          <div className="d-grid gap-2 d-sm-block text-center">
+            <button
+              className="btn btn-warning mx-sm-2 my-3 "
+              type="submit"
+              disabled={loadingCUD}
+            >
+              Guardar
+            </button>
+          </div>
+        </div>
       </form>
-    </div>
+    </CreateLayout>
   );
 };
 
