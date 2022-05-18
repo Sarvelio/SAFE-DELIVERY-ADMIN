@@ -10,7 +10,8 @@ import InputAdornment from "@mui/material/InputAdornment";
 import FormControl from "@mui/material/FormControl";
 import FormHelperText from "@mui/material/FormHelperText";
 import { ModalDelete } from "../modal/ModalDelete";
-import { ITipoProducto } from "../../interfaces";
+
+import { ISucursal } from "../../interfaces";
 
 interface props {
   sendData: (
@@ -21,7 +22,7 @@ interface props {
   navigateTo: (url: string) => void;
   errorData: string;
   loadingCUD: boolean;
-  data?: ITipoProducto;
+  data?: ISucursal;
   editar?: boolean;
   deleteData?: (
     _idDelete?: string,
@@ -30,7 +31,7 @@ interface props {
   ) => void;
 }
 
-export const FormTipoProducto: FC<props> = ({
+export const FormSucursales: FC<props> = ({
   errorData,
   sendData,
   loadingCUD,
@@ -44,22 +45,49 @@ export const FormTipoProducto: FC<props> = ({
     handleSubmit,
     formState: { errors },
     getValues,
-  } = useForm<ITipoProducto>({
+  } = useForm<ISucursal>({
     defaultValues: data,
   });
 
   const [open, setOpen] = useState(false);
 
   const _navigateTo = () => {
-    navigateTo("/admin/tipo-productos");
+    navigateTo("/admin/sucursales");
   };
 
-  const onRegisterForm = (formData: ITipoProducto) => {
+  const onRegisterForm = (formData: ISucursal) => {
     sendData(formData, _navigateTo);
   };
 
+  const InputTextField = ({
+    clave,
+    label,
+  }: {
+    clave: string;
+    label: string;
+  }) => {
+    return (
+      <div className="col-sm-6 my-2 px-3 px-sm-1 px-md-1 px-lg-3">
+        <TextField
+          label={label}
+          variant="filled"
+          fullWidth
+          // @ts-ignore
+          {...register(clave, {
+            required: "Este campo es requerido",
+            minLength: { value: 2, message: "Mínimo 2 caracteres" },
+          })}
+          // @ts-ignore
+          error={!!errors[clave]}
+          // @ts-ignore
+          helperText={errors[clave]?.message}
+        />
+      </div>
+    );
+  };
+
   return (
-    <CreateLayout title={` ${editar ? "Editar" : "Crear"} tipo de producto`}>
+    <CreateLayout title={` ${editar ? "Editar" : "Crear"} sucursal`}>
       <form onSubmit={handleSubmit(onRegisterForm)} noValidate>
         <ModalDelete
           eliminar={() => {
@@ -71,19 +99,14 @@ export const FormTipoProducto: FC<props> = ({
         />
         <div className="container-web-card ">
           <div className="row">
-            <div className="col-sm-6 my-2 px-3 px-sm-1 px-md-1 px-lg-3">
-              <TextField
-                label="Nombre"
-                variant="filled"
-                fullWidth
-                {...register("nombre", {
-                  required: "Este campo es requerido",
-                  minLength: { value: 2, message: "Mínimo 2 caracteres" },
-                })}
-                error={!!errors.nombre}
-                helperText={errors.nombre?.message}
-              />
-            </div>
+            {[
+              { name: "nombre", label: "Nombre" },
+              { name: "departamento", label: "Departamento" },
+              { name: "municipio", label: "Municipio" },
+              { name: "direccion", label: "Dirección" },
+            ].map(({ name, label }) => {
+              return <InputTextField clave={name} label={label} key={name} />;
+            })}
             <div className="col-sm-6 my-2 px-3 px-sm-1 px-md-1 px-lg-3">
               <FormControl
                 fullWidth
@@ -91,25 +114,27 @@ export const FormTipoProducto: FC<props> = ({
                 variant="filled"
                 className="m-0"
               >
-                <InputLabel htmlFor="filled-adornment-precioPorLibra">
-                  Precio por libra
+                <InputLabel htmlFor="filled-adornment-telefono">
+                  Teléfono
                 </InputLabel>
                 <FilledInput
                   type="number"
-                  id="filled-adornment-precioPorLibra"
-                  {...register("precioPorLibra", {
+                  id="filled-adornment-telefono"
+                  {...register("telefono", {
                     required: "Este campo es requerido",
+                    minLength: { value: 8, message: "Mínimo 8 caracteres" },
+                    maxLength: { value: 8, message: "Máximo 8 caracteres" },
                   })}
-                  error={!!errors.precioPorLibra}
+                  error={!!errors.telefono}
                   startAdornment={
-                    <InputAdornment position="start">Q</InputAdornment>
+                    <InputAdornment position="start">+502</InputAdornment>
                   }
                 />
                 <FormHelperText
-                  disabled={!!errors.precioPorLibra}
+                  disabled={!!errors.telefono}
                   className="Mui-error"
                 >
-                  {errors.precioPorLibra?.message}
+                  {errors.telefono?.message}
                 </FormHelperText>
               </FormControl>
             </div>

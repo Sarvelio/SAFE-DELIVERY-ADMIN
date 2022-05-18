@@ -32,6 +32,7 @@ export const Sidebar = ({ children }: { children: JSX.Element }) => {
     { path: "/", name: "Inicio" },
     { path: "/users", name: "Usuarios" },
     { path: "/admin/tipo-productos", name: "Tipo de productos" },
+    { path: "/admin/sucursales", name: "Sucursales" },
   ];
   const validpath = (path: string) => {
     if (path === "/") {

@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { useFirebase } from "../../../firebase";
-import { FormTipoProducto } from "../../../components";
-import { ITipoProducto } from "../../../interfaces";
+import { FormSucursales } from "../../../components";
+import { ISucursal } from "../../../interfaces";
 
 const CreatePage = () => {
   const router = useRouter();
@@ -14,8 +14,7 @@ const CreatePage = () => {
     loading,
     deleteData,
   } = useFirebase({
-    _collection: "tipoProductos",
-    // unique: [ "nombre"],
+    _collection: "sucursales",
     _id:
       router.query.id?.length == 20 ? (router.query.id as string) : undefined,
     read: router.query.id?.length == 20,
@@ -26,19 +25,19 @@ const CreatePage = () => {
       {router.query.id?.length == 20 ? (
         <>
           {!loading && data && (
-            <FormTipoProducto
+            <FormSucursales
               errorData={errorData}
               sendData={sendData}
               loadingCUD={loadingCUD}
               navigateTo={navigateTo}
-              data={data as unknown as ITipoProducto}
+              data={data as unknown as ISucursal}
               editar
               deleteData={deleteData}
             />
           )}
         </>
       ) : (
-        <FormTipoProducto
+        <FormSucursales
           errorData={errorData}
           sendData={sendData}
           loadingCUD={loadingCUD}
