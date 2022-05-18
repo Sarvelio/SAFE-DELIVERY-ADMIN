@@ -15,7 +15,7 @@ import db from "./configFirebase";
 import bcrypt from "bcryptjs";
 import { UiContext } from "../context/ui";
 
-type ICollection = "users" | "usuarios";
+type ICollection = "users" | "usuarios" | "tipoProductos";
 interface IUseFirebase {
   _collection: ICollection;
   _id?: string;
@@ -85,7 +85,9 @@ const useFirebase = ({
     const _doc = await updateDoc(doc(db, _collection, _id!), newData);
   };
   const deleteDataById = async (_idDelete: string) => {
-    const _doc = await deleteDoc(doc(db, _idDelete, _idDelete));
+    if (_idDelete) {
+      const _doc = await deleteDoc(doc(db, _collection, _idDelete));
+    }
   };
   const getDataUnique = async (newData: {}, unique: string): Promise<{}> => {
     const _doc = await getDocs(
@@ -98,7 +100,7 @@ const useFirebase = ({
   };
 
   const deleteData = (
-    _idDelete: string,
+    _idDelete?: string,
     callBack?: () => void,
     callBackError?: () => void
   ) => {

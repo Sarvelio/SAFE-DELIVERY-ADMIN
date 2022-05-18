@@ -2,13 +2,8 @@ import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { FirebaseLogin } from "../../../firebase";
 
-// import { dbUsers } from '../../../database';
-
 export default NextAuth({
-  // Configure one or more authentication providers
   providers: [
-    // ...add more providers here
-
     Credentials({
       name: "Custom Login",
       credentials: {

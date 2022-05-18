@@ -113,7 +113,7 @@ const CreatePage = () => {
 
           <div className="d-grid gap-2 d-sm-block text-center">
             <button
-              className="btn btn-warning mx-sm-2 my-3 "
+              className="btn btn-warning mx-sm-2 my-3 px-4"
               type="submit"
               disabled={loadingCUD}
             >

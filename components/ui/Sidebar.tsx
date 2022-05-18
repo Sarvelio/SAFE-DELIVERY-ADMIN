@@ -31,14 +31,12 @@ export const Sidebar = ({ children }: { children: JSX.Element }) => {
   const urls = [
     { path: "/", name: "Inicio" },
     { path: "/users", name: "Usuarios" },
-    { path: "/Hola", name: "Hola" },
+    { path: "/tipo-productos", name: "Tipo de productos" },
   ];
   const validpath = (path: string) => {
     if (path === "/") {
       return path === asPath;
     }
-    console.log("asPath", asPath);
-    console.log("path", path);
     return asPath.startsWith(path);
   };
   return (

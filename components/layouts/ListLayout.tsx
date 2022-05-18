@@ -7,6 +7,7 @@ import { DataGrid, esES, GridToolbar, GridColDef } from "@mui/x-data-grid";
 interface Props {
   title: string;
   urlCreate?: string;
+  titleCreate?: string;
   loading: boolean;
   columns: GridColDef[];
   data: [];
@@ -18,6 +19,7 @@ export const ListLayout: FC<Props> = ({
   data,
   columns,
   urlCreate,
+  titleCreate = "Agregar",
 }) => {
   return (
     <div className="container-web py-3 px-3 px-sm-4 px-md-2">
@@ -29,7 +31,7 @@ export const ListLayout: FC<Props> = ({
           <div className="col-12 d-flex">
             <span className="ms-auto mb-3">
               <NextLink href={urlCreate} passHref>
-                <button className="btn btn-warning"> Crear usuarios</button>
+                <button className="btn btn-warning px-4"> {titleCreate}</button>
               </NextLink>
             </span>
           </div>
