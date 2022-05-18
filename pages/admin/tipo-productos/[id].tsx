@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
-import { useFirebase } from "../../firebase";
-import { FormTipoProducto } from "../../components";
+import { useFirebase } from "../../../firebase";
+import { FormTipoProducto } from "../../../components";
 
 type FormData = {
   nombre: string;

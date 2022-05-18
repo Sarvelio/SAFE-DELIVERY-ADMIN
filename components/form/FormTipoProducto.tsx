@@ -1,7 +1,7 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 
 import { useForm } from "react-hook-form";
-import { TextField } from "@mui/material";
+import { TextField, Button } from "@mui/material";
 import { CreateLayout } from "..";
 
 import FilledInput from "@mui/material/FilledInput";
@@ -9,6 +9,7 @@ import InputLabel from "@mui/material/InputLabel";
 import InputAdornment from "@mui/material/InputAdornment";
 import FormControl from "@mui/material/FormControl";
 import FormHelperText from "@mui/material/FormHelperText";
+import { ModalDelete } from "../modal/ModalDelete";
 
 type FormData = {
   nombre: string;
@@ -50,8 +51,11 @@ export const FormTipoProducto: FC<props> = ({
   } = useForm<FormData>({
     defaultValues: data,
   });
+
+  const [open, setOpen] = useState(false);
+
   const _navigateTo = () => {
-    navigateTo("/tipo-productos");
+    navigateTo("/admin/tipo-productos");
   };
 
   const onRegisterForm = ({ nombre, precioPorLibra }: FormData) => {
@@ -62,6 +66,14 @@ export const FormTipoProducto: FC<props> = ({
   return (
     <CreateLayout title={` ${editar ? "Editar" : "Crear"} tipo de producto`}>
       <form onSubmit={handleSubmit(onRegisterForm)} noValidate>
+        <ModalDelete
+          eliminar={() => {
+            // @ts-ignore
+            deleteData(getValues("id"), _navigateTo);
+          }}
+          open={open}
+          setOpen={setOpen}
+        />
         <div className="container-web-card ">
           <div className="row">
             <div className="col-sm-6 my-2 px-3 px-sm-1 px-md-1 px-lg-3">
@@ -114,12 +126,11 @@ export const FormTipoProducto: FC<props> = ({
           )}
           {editar && (
             <button
-              className="btn btn-outline-danger mx-0 mt-2 px-4 "
+              className="btn btn-outline-danger mx-0 my-2 px-4"
               type="button"
               disabled={loadingCUD}
               onClick={() => {
-                // @ts-ignore
-                deleteData(getValues("id"), _navigateTo);
+                setOpen(true);
               }}
             >
               Eliminar registro
@@ -128,9 +139,19 @@ export const FormTipoProducto: FC<props> = ({
 
           <div className="d-grid gap-2 d-sm-block text-center">
             <button
-              className="btn btn-warning mx-sm-2 my-3 px-4 "
+              className="btn btn-secondary mx-sm-2 mt-2 px-4 "
+              type="button"
+              disabled={loadingCUD}
+              style={{ minWidth: 150 }}
+              onClick={_navigateTo}
+            >
+              Cancelar
+            </button>
+            <button
+              className="btn btn-warning mx-sm-2 mt-2 px-4 "
               type="submit"
               disabled={loadingCUD}
+              style={{ minWidth: 150 }}
             >
               {editar ? "Editar" : "Guardar"}
             </button>

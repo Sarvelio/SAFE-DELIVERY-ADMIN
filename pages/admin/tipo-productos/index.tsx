@@ -1,10 +1,12 @@
 import type { NextPage } from "next";
 import React, { useEffect } from "react";
 import { GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
-import { useFirebase } from "../../firebase";
+import { useFirebase } from "../../../firebase";
 
 import NextLink from "next/link";
-import { ListLayout } from "../../components";
+import { ListLayout } from "../../../components";
+
+const url = "/admin/tipo-productos";
 
 const columns: GridColDef[] = [
   {
@@ -17,7 +19,7 @@ const columns: GridColDef[] = [
     headerAlign: "center",
     renderCell: (params: GridValueGetterParams) => {
       return (
-        <NextLink href={`/tipo-productos/${params.row.id}`}>
+        <NextLink href={`${url}/${params.row.id}`}>
           <button className="btn btn-secondary btn-sm">Editar</button>
         </NextLink>
       );
@@ -39,7 +41,7 @@ const ListPage: NextPage = () => {
       loading={loading}
       columns={columns}
       data={data}
-      urlCreate="/tipo-productos/create"
+      urlCreate={`${url}/create`}
     />
   );
 };
