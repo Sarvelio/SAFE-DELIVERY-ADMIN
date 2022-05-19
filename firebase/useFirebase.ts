@@ -91,10 +91,16 @@ const useFirebase = ({
   };
   const getDataUnique = async (newData: {}, unique: string): Promise<{}> => {
     const _doc = await getDocs(
-      query(
-        collection(db, _collection), // @ts-ignore
-        where(unique, "==", newData[unique])
-      )
+      _id
+        ? query(
+            collection(db, _collection),
+            where("id", "!=", _id), // @ts-ignore
+            where(unique, "==", newData[unique])
+          )
+        : query(
+            collection(db, _collection), // @ts-ignore
+            where(unique, "==", newData[unique])
+          )
     );
     return _doc.size > 0;
   };
@@ -170,6 +176,7 @@ const useFirebase = ({
         })
         .catch((error) => {
           console.log("--error--", error);
+          setLoadingCUD(false);
           if (callBackError) callBackError();
         });
     } else {

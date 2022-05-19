@@ -15,9 +15,9 @@ import {
 } from "@mui/material";
 import { ErrorOutline } from "@mui/icons-material";
 import bcrypt from "bcryptjs";
-import { validations } from "../../utils";
-import { useFirebase } from "../../firebase";
-import { CreateLayout } from "../../components";
+import { validations } from "../../../utils";
+import { useFirebase } from "../../../firebase";
+import { CreateLayout } from "../../../components";
 
 type FormData = {
   name: string;
@@ -53,7 +53,7 @@ const CreatePage = () => {
     sendData(
       { nombre: name, email, password: bcrypt.hashSync(password) },
       () => {
-        navigateTo("/users");
+        navigateTo("/admin/users");
       }
     );
   };

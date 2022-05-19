@@ -15,7 +15,7 @@ const CreatePage = () => {
     deleteData,
   } = useFirebase({
     _collection: "tipoProductos",
-    // unique: [ "nombre"],
+    unique: ["nombre"],
     _id:
       router.query.id?.length == 20 ? (router.query.id as string) : undefined,
     read: router.query.id?.length == 20,
