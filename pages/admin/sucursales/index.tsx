@@ -29,7 +29,12 @@ const columns: GridColDef[] = [
   { field: "departamento", headerName: "Departamento", width: 135 },
   { field: "municipio", headerName: "Municipio", width: 135 },
   { field: "direccion", headerName: "Dirección", width: 135 },
-  { field: "telefono", headerName: "Teléfono", width: 135 },
+  {
+    field: "telefono",
+    headerName: "Teléfono",
+    width: 135,
+    valueFormatter: (e) => "+502 " + e.value,
+  },
 ];
 const ListPage: NextPage = () => {
   const { data, loading } = useFirebase({

@@ -26,7 +26,12 @@ const columns: GridColDef[] = [
     },
   },
   { field: "nombre", headerName: "Nombre", width: 250 },
-  { field: "precioPorLibra", headerName: "Precio por Libra", width: 135 },
+  {
+    field: "precioPorLibra",
+    headerName: "Precio por Libra",
+    width: 135,
+    valueFormatter: (e) => "Q " + e.value,
+  },
   { field: "id", headerName: "Id", width: 250 },
 ];
 const ListPage: NextPage = () => {

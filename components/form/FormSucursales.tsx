@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useState, useEffect } from "react";
 
 import { useForm } from "react-hook-form";
 import { TextField, Button } from "@mui/material";
@@ -12,6 +12,11 @@ import FormHelperText from "@mui/material/FormHelperText";
 import { ModalDelete } from "../modal/ModalDelete";
 
 import { ISucursal } from "../../interfaces";
+
+import MenuItem from "@mui/material/MenuItem";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
+import { DEPARTAMENTOS, MUNICIPIOS } from "../../utils";
+import { InputSelect, InputTextField, InputNumber } from "../input";
 
 interface props {
   sendData: (
@@ -36,15 +41,18 @@ export const FormSucursales: FC<props> = ({
   sendData,
   loadingCUD,
   navigateTo,
-  data = {},
+  data = { departamento: "", municipio: "" },
   editar,
   deleteData,
 }) => {
   const {
     register,
     handleSubmit,
+    clearErrors,
     formState: { errors },
     getValues,
+    setValue,
+    watch,
   } = useForm<ISucursal>({
     defaultValues: data,
   });
@@ -57,33 +65,6 @@ export const FormSucursales: FC<props> = ({
 
   const onRegisterForm = (formData: ISucursal) => {
     sendData(formData, _navigateTo);
-  };
-
-  const InputTextField = ({
-    clave,
-    label,
-  }: {
-    clave: string;
-    label: string;
-  }) => {
-    return (
-      <div className="col-sm-6 my-2 px-3 px-sm-1 px-md-1 px-lg-3">
-        <TextField
-          label={label}
-          variant="filled"
-          fullWidth
-          // @ts-ignore
-          {...register(clave, {
-            required: "Este campo es requerido",
-            minLength: { value: 2, message: "Mínimo 2 caracteres" },
-          })}
-          // @ts-ignore
-          error={!!errors[clave]}
-          // @ts-ignore
-          helperText={errors[clave]?.message}
-        />
-      </div>
-    );
   };
 
   return (
@@ -99,45 +80,60 @@ export const FormSucursales: FC<props> = ({
         />
         <div className="container-web-card ">
           <div className="row">
+            <InputSelect
+              name="departamento"
+              title="Departamento"
+              items={DEPARTAMENTOS}
+              props={{
+                ...register("departamento", {
+                  required: "Este campo es requerido",
+                }),
+                onChange: (e: any) => {
+                  setValue("municipio", "");
+                  setValue("departamento", e.target.value);
+                },
+              }}
+              {...{ errors, watch, clearErrors }}
+            />
+            <InputSelect
+              name="municipio"
+              title="Departamento"
+              items={MUNICIPIOS.filter(
+                ({ departamento }) => departamento == watch("departamento")
+              )}
+              props={{
+                ...register("municipio", {
+                  required: "Este campo es requerido",
+                }),
+              }}
+              {...{ errors, watch, clearErrors }}
+            />
             {[
-              { name: "nombre", label: "Nombre" },
-              { name: "departamento", label: "Departamento" },
-              { name: "municipio", label: "Municipio" },
               { name: "direccion", label: "Dirección" },
+              { name: "nombre", label: "Nombre" },
             ].map(({ name, label }) => {
-              return <InputTextField clave={name} label={label} key={name} />;
-            })}
-            <div className="col-sm-6 my-2 px-3 px-sm-1 px-md-1 px-lg-3">
-              <FormControl
-                fullWidth
-                sx={{ m: 1 }}
-                variant="filled"
-                className="m-0"
-              >
-                <InputLabel htmlFor="filled-adornment-telefono">
-                  Teléfono
-                </InputLabel>
-                <FilledInput
-                  type="number"
-                  id="filled-adornment-telefono"
-                  {...register("telefono", {
-                    required: "Este campo es requerido",
-                    minLength: { value: 8, message: "Mínimo 8 caracteres" },
-                    maxLength: { value: 8, message: "Máximo 8 caracteres" },
-                  })}
-                  error={!!errors.telefono}
-                  startAdornment={
-                    <InputAdornment position="start">+502</InputAdornment>
-                  }
+              return (
+                <InputTextField
+                  name={name}
+                  title={label}
+                  key={name}
+                  {...{ errors, register }}
                 />
-                <FormHelperText
-                  disabled={!!errors.telefono}
-                  className="Mui-error"
-                >
-                  {errors.telefono?.message}
-                </FormHelperText>
-              </FormControl>
-            </div>
+              );
+            })}
+            <InputNumber
+              name="telefono"
+              title="Teléfono"
+              simbol="+502"
+              errors={errors}
+              props={{
+                ...register("telefono", {
+                  required: "Este campo es requerido",
+                  minLength: { value: 8, message: "Mínimo 8 caracteres" },
+                  maxLength: { value: 8, message: "Máximo 8 caracteres" },
+                }),
+              }}
+            />
           </div>
           {errorData && (
             <div className="alert alert-danger mt-2 mb-0" role="alert">
@@ -156,7 +152,6 @@ export const FormSucursales: FC<props> = ({
               Eliminar registro
             </button>
           )}
-
           <div className="d-grid gap-2 d-sm-block text-center">
             <button
               className="btn btn-secondary mx-sm-2 mt-2 px-4 "

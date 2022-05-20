@@ -11,6 +11,7 @@ import FormControl from "@mui/material/FormControl";
 import FormHelperText from "@mui/material/FormHelperText";
 import { ModalDelete } from "../modal/ModalDelete";
 import { ITipoProducto } from "../../interfaces";
+import { InputNumber } from "../input";
 
 interface props {
   sendData: (
@@ -84,35 +85,18 @@ export const FormTipoProducto: FC<props> = ({
                 helperText={errors.nombre?.message}
               />
             </div>
-            <div className="col-sm-6 my-2 px-3 px-sm-1 px-md-1 px-lg-3">
-              <FormControl
-                fullWidth
-                sx={{ m: 1 }}
-                variant="filled"
-                className="m-0"
-              >
-                <InputLabel htmlFor="filled-adornment-precioPorLibra">
-                  Precio por libra
-                </InputLabel>
-                <FilledInput
-                  type="number"
-                  id="filled-adornment-precioPorLibra"
-                  {...register("precioPorLibra", {
-                    required: "Este campo es requerido",
-                  })}
-                  error={!!errors.precioPorLibra}
-                  startAdornment={
-                    <InputAdornment position="start">Q</InputAdornment>
-                  }
-                />
-                <FormHelperText
-                  disabled={!!errors.precioPorLibra}
-                  className="Mui-error"
-                >
-                  {errors.precioPorLibra?.message}
-                </FormHelperText>
-              </FormControl>
-            </div>
+
+            <InputNumber
+              name="precioPorLibra"
+              title="Precio por libra"
+              simbol="Q"
+              errors={errors}
+              props={{
+                ...register("precioPorLibra", {
+                  required: "Este campo es requerido",
+                }),
+              }}
+            />
           </div>
           {errorData && (
             <div className="alert alert-danger mt-2 mb-0" role="alert">

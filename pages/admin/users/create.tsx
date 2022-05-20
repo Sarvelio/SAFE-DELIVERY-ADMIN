@@ -47,7 +47,6 @@ const CreatePage = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<FormData>();
-  const [showError, setShowError] = useState(false);
 
   const onRegisterForm = ({ name, email, password }: FormData) => {
     sendData(
