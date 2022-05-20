@@ -11,12 +11,14 @@ import FormControl from "@mui/material/FormControl";
 import FormHelperText from "@mui/material/FormHelperText";
 import { ModalDelete } from "../modal/ModalDelete";
 
-import { ISucursal } from "../../interfaces";
+import { IUser } from "../../interfaces";
 
+import bcrypt from "bcryptjs";
 import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-import { DEPARTAMENTOS, MUNICIPIOS } from "../../utils";
+import { DEPARTAMENTOS, MUNICIPIOS, ROLES, validations } from "../../utils";
 import { InputSelect, InputTextField, InputNumber } from "../input";
+import FormFooter from "./FormFooter";
 
 interface props {
   sendData: (
@@ -27,7 +29,7 @@ interface props {
   navigateTo: (url: string) => void;
   errorData: string;
   loadingCUD: boolean;
-  data?: ISucursal;
+  data?: IUser;
   editar?: boolean;
   deleteData?: (
     _idDelete?: string,
@@ -36,13 +38,13 @@ interface props {
   ) => void;
 }
 
-export const FormSucursales: FC<props> = ({
+export const FormUsuario: FC<props> = ({
   errorData,
   sendData,
   loadingCUD,
   navigateTo,
-  data = { departamento: "", municipio: "" },
-  editar,
+  data = { departamento: "", municipio: "", rol: "" },
+  editar = false,
   deleteData,
 }) => {
   const {
@@ -53,22 +55,25 @@ export const FormSucursales: FC<props> = ({
     getValues,
     setValue,
     watch,
-  } = useForm<ISucursal>({
+  } = useForm<IUser>({
     defaultValues: data,
   });
 
   const [open, setOpen] = useState(false);
 
   const _navigateTo = () => {
-    navigateTo("/admin/sucursales");
+    navigateTo("/admin/users");
   };
 
-  const onRegisterForm = (formData: ISucursal) => {
-    sendData(formData, _navigateTo);
+  const onRegisterForm = (formData: IUser) => {
+    sendData(
+      { ...formData, contrasena: bcrypt.hashSync(formData.contrasena) },
+      _navigateTo
+    );
   };
 
   return (
-    <CreateLayout title={` ${editar ? "Editar" : "Crear"} sucursal`}>
+    <CreateLayout title={` ${editar ? "Editar" : "Crear"} usuario`}>
       <form onSubmit={handleSubmit(onRegisterForm)} noValidate>
         <ModalDelete
           eliminar={() => {
@@ -80,6 +85,24 @@ export const FormSucursales: FC<props> = ({
         />
         <div className="container-web-card ">
           <div className="row">
+            <InputTextField
+              name="nombre"
+              title="Nombre"
+              {...{ errors, register }}
+            />
+            <InputNumber
+              name="telefono"
+              title="Teléfono"
+              simbol="+502"
+              errors={errors}
+              props={{
+                ...register("telefono", {
+                  required: "Este campo es requerido",
+                  minLength: { value: 8, message: "Mínimo 8 caracteres" },
+                  maxLength: { value: 8, message: "Máximo 8 caracteres" },
+                }),
+              }}
+            />
             <InputSelect
               name="departamento"
               title="Departamento"
@@ -95,9 +118,10 @@ export const FormSucursales: FC<props> = ({
               }}
               {...{ errors, watch, clearErrors }}
             />
+
             <InputSelect
               name="municipio"
-              title="Departamento"
+              title="Municipio"
               items={MUNICIPIOS.filter(
                 ({ departamento }) => departamento == watch("departamento")
               )}
@@ -108,69 +132,54 @@ export const FormSucursales: FC<props> = ({
               }}
               {...{ errors, watch, clearErrors }}
             />
-            {[
-              { name: "direccion", label: "Dirección" },
-              { name: "nombre", label: "Nombre" },
-            ].map(({ name, label }) => {
-              return (
-                <InputTextField
-                  name={name}
-                  title={label}
-                  key={name}
-                  {...{ errors, register }}
-                />
-              );
-            })}
-            <InputNumber
-              name="telefono"
-              title="Teléfono"
-              simbol="+502"
-              errors={errors}
+
+            <InputTextField
+              name="direccion"
+              title="Dirección"
+              {...{ errors, register }}
+            />
+
+            <InputTextField
+              name="correo"
+              title="Correo"
+              type="email"
               props={{
-                ...register("telefono", {
+                ...register("correo", {
                   required: "Este campo es requerido",
-                  minLength: { value: 8, message: "Mínimo 8 caracteres" },
-                  maxLength: { value: 8, message: "Máximo 8 caracteres" },
+                  validate: validations.isEmail,
                 }),
               }}
+              {...{ errors, register }}
+            />
+            <InputTextField
+              name="contrasena"
+              title="Contraseña"
+              type="password"
+              props={{
+                ...register("contrasena", {
+                  required: "Este campo es requerido",
+                  minLength: { value: 6, message: "Mínimo 6 caracteres" },
+                }),
+              }}
+              {...{ errors, register }}
+            />
+
+            <InputSelect
+              name="rol"
+              title="Rol"
+              items={ROLES}
+              props={{
+                ...register("rol", {
+                  required: "Este campo es requerido",
+                }),
+              }}
+              {...{ errors, watch, clearErrors }}
             />
           </div>
-          {errorData && (
-            <div className="alert alert-danger mt-2 mb-0" role="alert">
-              {errorData}
-            </div>
-          )}
-          {editar && (
-            <button
-              className="btn btn-outline-danger mx-0 my-2 px-4"
-              type="button"
-              disabled={loadingCUD}
-              onClick={() => {
-                setOpen(true);
-              }}
-            >
-              Eliminar registro
-            </button>
-          )}
-          <div className="d-grid gap-2 d-sm-block text-center">
-            <button
-              className="btn btn-secondary mx-sm-2 mt-2 px-4 "
-              type="button"
-              disabled={loadingCUD}
-              style={{ minWidth: 150 }}
-              onClick={_navigateTo}
-            >
-              Cancelar
-            </button>
-            <button
-              className="btn btn-warning mx-sm-2 mt-2 px-4 "
-              type="submit"
-              disabled={loadingCUD}
-              style={{ minWidth: 150 }}
-            >
-              {editar ? "Editar" : "Guardar"}
-            </button>
-          </div>
+
+          <FormFooter
+            {...{ errorData, editar, loadingCUD, _navigateTo, setOpen }}
+          />
         </div>
       </form>
     </CreateLayout>

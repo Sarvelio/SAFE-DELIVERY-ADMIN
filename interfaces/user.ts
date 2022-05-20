@@ -1,11 +1,15 @@
 export interface IUser {
-  _id: string;
-  name: string;
+  nombre: string;
+  telefono: string;
+  departamento: string;
+  municipio: string;
+  direccion: string;
+  correo: string;
+  contrasena: string;
+  rol: string;
+
+  id?: string;
+
   email: string;
   password?: string;
-  role: string;
-  nombre?: string;
-
-  createdAt?: string;
-  updatedAt?: string;
 }

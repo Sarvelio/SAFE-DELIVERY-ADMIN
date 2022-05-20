@@ -12,6 +12,7 @@ import FormHelperText from "@mui/material/FormHelperText";
 import { ModalDelete } from "../modal/ModalDelete";
 import { ITipoProducto } from "../../interfaces";
 import { InputNumber } from "../input";
+import FormFooter from "./FormFooter";
 
 interface props {
   sendData: (
@@ -37,7 +38,7 @@ export const FormTipoProducto: FC<props> = ({
   loadingCUD,
   navigateTo,
   data = {},
-  editar,
+  editar = false,
   deleteData,
 }) => {
   const {
@@ -103,38 +104,9 @@ export const FormTipoProducto: FC<props> = ({
               {errorData}
             </div>
           )}
-          {editar && (
-            <button
-              className="btn btn-outline-danger mx-0 my-2 px-4"
-              type="button"
-              disabled={loadingCUD}
-              onClick={() => {
-                setOpen(true);
-              }}
-            >
-              Eliminar registro
-            </button>
-          )}
-
-          <div className="d-grid gap-2 d-sm-block text-center">
-            <button
-              className="btn btn-secondary mx-sm-2 mt-2 px-4 "
-              type="button"
-              disabled={loadingCUD}
-              style={{ minWidth: 150 }}
-              onClick={_navigateTo}
-            >
-              Cancelar
-            </button>
-            <button
-              className="btn btn-warning mx-sm-2 mt-2 px-4 "
-              type="submit"
-              disabled={loadingCUD}
-              style={{ minWidth: 150 }}
-            >
-              {editar ? "Editar" : "Guardar"}
-            </button>
-          </div>
+          <FormFooter
+            {...{ errorData, editar, loadingCUD, _navigateTo, setOpen }}
+          />
         </div>
       </form>
     </CreateLayout>

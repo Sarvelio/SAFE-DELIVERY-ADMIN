@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import { useFirebase } from "../../../firebase";
-import { FormSucursales } from "../../../components";
+import { FormSucursal } from "../../../components";
 import { ISucursal } from "../../../interfaces";
 
 const CreatePage = () => {
@@ -25,7 +25,7 @@ const CreatePage = () => {
       {router.query.id?.length == 20 ? (
         <>
           {!loading && data && (
-            <FormSucursales
+            <FormSucursal
               errorData={errorData}
               sendData={sendData}
               loadingCUD={loadingCUD}
@@ -37,7 +37,7 @@ const CreatePage = () => {
           )}
         </>
       ) : (
-        <FormSucursales
+        <FormSucursal
           errorData={errorData}
           sendData={sendData}
           loadingCUD={loadingCUD}
