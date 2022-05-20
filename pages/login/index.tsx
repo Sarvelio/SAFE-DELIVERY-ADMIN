@@ -21,8 +21,8 @@ import { useRouter } from "next/router";
 import { Header } from "../../components/ui";
 
 type FormData = {
-  email: string;
-  password: string;
+  correo: string;
+  contrasena: string;
 };
 type IRes = {
   error: string;
@@ -40,9 +40,9 @@ const LoginPage = () => {
   } = useForm<FormData>();
   const [showError, setShowError] = useState(false);
 
-  const onLoginUser = async ({ email, password }: FormData) => {
+  const onLoginUser = async ({ correo, contrasena }: FormData) => {
     setShowError(false);
-    await signIn("credentials", { email, password, redirect: false })
+    await signIn("credentials", { correo, contrasena, redirect: false })
       .then((res) => {
         // @ts-ignore
         if (res.error) {
@@ -89,12 +89,12 @@ const LoginPage = () => {
                     label="Correo"
                     variant="filled"
                     fullWidth
-                    {...register("email", {
+                    {...register("correo", {
                       required: "Este campo es requerido",
                       validate: validations.isEmail,
                     })}
-                    error={!!errors.email}
-                    helperText={errors.email?.message}
+                    error={!!errors.correo}
+                    helperText={errors.correo?.message}
                   />
                 </Grid>
                 <br />
@@ -104,12 +104,12 @@ const LoginPage = () => {
                     type="password"
                     variant="filled"
                     fullWidth
-                    {...register("password", {
+                    {...register("contrasena", {
                       required: "Este campo es requerido",
                       minLength: { value: 6, message: "Mínimo 6 caracteres" },
                     })}
-                    error={!!errors.password}
-                    helperText={errors.password?.message}
+                    error={!!errors.contrasena}
+                    helperText={errors.contrasena?.message}
                   />
                 </Grid>
 

@@ -27,6 +27,7 @@ interface props {
     callBackError?: (() => void) | undefined
   ) => void;
   navigateTo: (url: string) => void;
+  currentPassword?: string;
   errorData: string;
   loadingCUD: boolean;
   data?: IUser;
@@ -46,6 +47,7 @@ export const FormUsuario: FC<props> = ({
   data = { departamento: "", municipio: "", rol: "" },
   editar = false,
   deleteData,
+  currentPassword = "",
 }) => {
   const {
     register,
@@ -62,12 +64,19 @@ export const FormUsuario: FC<props> = ({
   const [open, setOpen] = useState(false);
 
   const _navigateTo = () => {
-    navigateTo("/admin/users");
+    navigateTo("/admin/usuarios");
   };
 
   const onRegisterForm = (formData: IUser) => {
     sendData(
-      { ...formData, contrasena: bcrypt.hashSync(formData.contrasena) },
+      editar
+        ? {
+            ...formData,
+            contrasena: formData.contrasena
+              ? bcrypt.hashSync(formData.contrasena)
+              : currentPassword,
+          }
+        : { ...formData, contrasena: bcrypt.hashSync(formData.contrasena) },
       _navigateTo
     );
   };
@@ -156,10 +165,17 @@ export const FormUsuario: FC<props> = ({
               title="Contraseña"
               type="password"
               props={{
-                ...register("contrasena", {
-                  required: "Este campo es requerido",
-                  minLength: { value: 6, message: "Mínimo 6 caracteres" },
-                }),
+                ...register(
+                  "contrasena",
+                  editar
+                    ? {
+                        minLength: { value: 6, message: "Mínimo 6 caracteres" },
+                      }
+                    : {
+                        required: "Este campo es requerido",
+                        minLength: { value: 6, message: "Mínimo 6 caracteres" },
+                      }
+                ),
               }}
               {...{ errors, register }}
             />

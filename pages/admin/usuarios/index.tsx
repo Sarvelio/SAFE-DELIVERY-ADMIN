@@ -12,6 +12,7 @@ import { useFirebase } from "../../../firebase";
 import NextLink from "next/link";
 import { ListLayout } from "../../../components";
 import { useState } from "react";
+import { ROLES, DEPARTAMENTOS, MUNICIPIOS } from "../../../utils";
 import {
   AppBar,
   Badge,
@@ -25,12 +26,41 @@ import {
   Typography,
 } from "@mui/material";
 
+const url = "/admin/usuarios";
+
 const columns: GridColDef[] = [
-  { field: "rol", headerName: "Rol", width: 120 },
+  {
+    field: "",
+    headerName: "Acción",
+    width: 85,
+    sortable: false,
+    hide: false,
+    align: "center",
+    headerAlign: "center",
+    renderCell: (params: GridValueGetterParams) => {
+      return (
+        <NextLink href={`${url}/${params.row.id}`}>
+          <button className="btn btn-secondary btn-sm">Editar</button>
+        </NextLink>
+      );
+    },
+  },
   { field: "nombre", headerName: "Nombre", width: 200 },
   { field: "correo", headerName: "Correo" },
   { field: "telefono", headerName: "Telefono" },
-  { field: "id", headerName: "Id", width: 250 },
+  {
+    field: "departamento",
+    headerName: "Departamento",
+    valueFormatter: (e) =>
+      DEPARTAMENTOS.find(({ id }) => id == e.value)?.nombre,
+  },
+  {
+    field: "municipio",
+    headerName: "Municipio",
+    valueFormatter: (e) => MUNICIPIOS.find(({ id }) => id == e.value)?.nombre,
+  },
+  { field: "direccion", headerName: "Dirección" },
+  { field: "rol", headerName: "Rol" },
 ];
 const ListPage: NextPage = () => {
   const { data, loading } = useFirebase({
@@ -47,42 +77,24 @@ const ListPage: NextPage = () => {
         </div>
         <div className="col-12 d-flex">
           <span className="ms-auto mb-3">
-            <NextLink href="/admin/users/create" passHref>
-              <button className="btn btn-warning px-4"> Agregar</button>
+            <NextLink href={`${url}/create`} passHref>
+              <button className="btn btn-warning px-4">Agregar</button>
             </NextLink>
           </span>
         </div>
         <ul className="nav nav-tabs">
-          <li className="nav-item">
-            <button
-              className={` nav-link ${rol == "administrador" ? "active" : ""}`}
-              onClick={() => {
-                setRol("administrador");
-              }}
-            >
-              Administrador
-            </button>
-          </li>
-          <li className="nav-item">
-            <button
-              className={` nav-link ${rol == "oficinista" ? "active" : ""}`}
-              onClick={() => {
-                setRol("oficinista");
-              }}
-            >
-              Oficinista
-            </button>
-          </li>
-          <li className="nav-item">
-            <button
-              className={` nav-link ${rol == "piloto" ? "active" : ""}`}
-              onClick={() => {
-                setRol("piloto");
-              }}
-            >
-              Piloto
-            </button>
-          </li>
+          {ROLES.map(({ id, nombre }) => (
+            <li className="nav-item" key={id}>
+              <button
+                className={` nav-link ${rol == id ? "active" : ""}`}
+                onClick={() => {
+                  setRol(id);
+                }}
+              >
+                {nombre}
+              </button>
+            </li>
+          ))}
         </ul>
         <div
           className="col-12 d-inline shadow px-0"

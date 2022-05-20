@@ -7,19 +7,22 @@ export default NextAuth({
     Credentials({
       name: "Custom Login",
       credentials: {
-        email: {
+        correo: {
           label: "Correo:",
           type: "email",
           placeholder: "correo@google.com",
         },
-        password: {
+        contrasena: {
           label: "Contraseña:",
           type: "password",
           placeholder: "Contraseña",
         },
       },
       async authorize(credentials) {
-        return await FirebaseLogin(credentials!.email, credentials!.password);
+        return await FirebaseLogin(
+          credentials!.correo,
+          credentials!.contrasena
+        );
       },
     }),
   ],

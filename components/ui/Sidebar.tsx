@@ -30,7 +30,7 @@ export const Sidebar = ({ children }: { children: JSX.Element }) => {
 
   const urls = [
     { path: "/", name: "Inicio" },
-    { path: "/admin/users", name: "Usuarios" },
+    { path: "/admin/usuarios", name: "Usuarios" },
     { path: "/admin/tipo-productos", name: "Tipo de productos" },
     { path: "/admin/sucursales", name: "Sucursales" },
   ];

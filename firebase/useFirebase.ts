@@ -201,20 +201,20 @@ const useFirebase = ({
 };
 
 const FirebaseLogin = async (
-  email: string,
-  password: string
+  correo: string,
+  contrasena: string
 ): Promise<{} | null> => {
   const _docs = await getDocs(
     query(
       collection(db, "usuarios"), // @ts-ignore
-      where("email", "==", email)
+      where("correo", "==", correo)
     )
   );
   if (_docs.size > 0) {
-    const _user: { password?: string } = _docs.docs[0].data();
-    const pass = _user.password;
-    delete _user.password;
-    if (!bcrypt.compareSync(password, pass!)) {
+    const _user: { contrasena?: string } = _docs.docs[0].data();
+    const pass = _user.contrasena;
+    delete _user.contrasena;
+    if (!bcrypt.compareSync(contrasena, pass!)) {
       return null;
     }
     return _user;

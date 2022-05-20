@@ -31,7 +31,7 @@ export const ListLayout: FC<Props> = ({
           <div className="col-12 d-flex">
             <span className="ms-auto mb-3">
               <NextLink href={urlCreate} passHref>
-                <button className="btn btn-warning px-4"> {titleCreate}</button>
+                <button className="btn btn-warning px-4">{titleCreate}</button>
               </NextLink>
             </span>
           </div>

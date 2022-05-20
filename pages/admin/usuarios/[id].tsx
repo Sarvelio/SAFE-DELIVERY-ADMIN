@@ -15,7 +15,7 @@ const CreatePage = () => {
     deleteData,
   } = useFirebase({
     _collection: "usuarios",
-    unique: ["email", "nombre"],
+    unique: ["correo", "nombre"],
     _id:
       router.query.id?.length == 20 ? (router.query.id as string) : undefined,
     read: router.query.id?.length == 20,
@@ -31,7 +31,11 @@ const CreatePage = () => {
               sendData={sendData}
               loadingCUD={loadingCUD}
               navigateTo={navigateTo}
-              data={data as unknown as IUser}
+              data={{
+                ...(data as unknown as IUser),
+                contrasena: "",
+              }}
+              currentPassword={(data as unknown as IUser).contrasena}
               editar
               deleteData={deleteData}
             />
