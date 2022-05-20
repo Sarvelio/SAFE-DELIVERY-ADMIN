@@ -3,4 +3,4 @@ export * from "./layouts";
 export * from "./ui";
 export * from "./form";
 export * from "./modal";
-export * from "./ainput";
+export * from "./input";

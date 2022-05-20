@@ -17,7 +17,7 @@ import bcrypt from "bcryptjs";
 import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { DEPARTAMENTOS, MUNICIPIOS, ROLES, validations } from "../../utils";
-import { InputSelect, InputTextField, InputNumber } from "../ainput";
+import { InputSelect, InputTextField, InputNumber } from "../input";
 import FormFooter from "./FormFooter";
 
 interface props {
