@@ -11,7 +11,7 @@ import FormControl from "@mui/material/FormControl";
 import FormHelperText from "@mui/material/FormHelperText";
 import { ModalDelete } from "../modal/ModalDelete";
 import { ITipoProducto } from "../../interfaces";
-import { InputNumber } from "../input";
+import { InputNumber } from "../ainput";
 import FormFooter from "./FormFooter";
 
 interface props {
