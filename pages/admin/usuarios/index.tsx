@@ -45,22 +45,26 @@ const columns: GridColDef[] = [
       );
     },
   },
-  { field: "nombre", headerName: "Nombre", width: 200 },
-  { field: "correo", headerName: "Correo" },
+  { field: "nombre", headerName: "Nombre", flex: 1.3, minWidth: 150 },
+  { field: "correo", headerName: "Correo", flex: 1, minWidth: 120 },
   { field: "telefono", headerName: "Telefono" },
   {
     field: "departamento",
     headerName: "Departamento",
     valueFormatter: (e) =>
       DEPARTAMENTOS.find(({ id }) => id == e.value)?.nombre,
+    flex: 1,
+    minWidth: 120,
   },
   {
     field: "municipio",
     headerName: "Municipio",
     valueFormatter: (e) => MUNICIPIOS.find(({ id }) => id == e.value)?.nombre,
+    flex: 1,
+    minWidth: 120,
   },
-  { field: "direccion", headerName: "Dirección" },
-  { field: "rol", headerName: "Rol" },
+  { field: "direccion", headerName: "Dirección", flex: 1, minWidth: 120 },
+  { field: "rol", headerName: "Rol", width: 110 },
 ];
 const ListPage: NextPage = () => {
   const { data, loading } = useFirebase({
@@ -73,7 +77,7 @@ const ListPage: NextPage = () => {
     <div className="container-web py-3 px-3 px-sm-4 px-md-2">
       <div className="row ">
         <div className="col-12 d-flex">
-          <h3>Usuario</h3>
+          <h3>Usuarios</h3>
         </div>
         <div className="col-12 d-flex">
           <span className="ms-auto mb-3">

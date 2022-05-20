@@ -25,13 +25,14 @@ const columns: GridColDef[] = [
       );
     },
   },
-  { field: "nombre", headerName: "Nombre", width: 250 },
   {
     field: "precioPorLibra",
     headerName: "Precio por Libra",
     width: 135,
     valueFormatter: (e) => "Q " + e.value,
   },
+  { field: "nombre", headerName: "Nombre", width: 250, flex: 1, minWidth: 150 },
+
   { field: "id", headerName: "Id", width: 250 },
 ];
 const ListPage: NextPage = () => {

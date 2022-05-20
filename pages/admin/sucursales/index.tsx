@@ -5,6 +5,7 @@ import { useFirebase } from "../../../firebase";
 
 import NextLink from "next/link";
 import { ListLayout } from "../../../components";
+import { DEPARTAMENTOS, MUNICIPIOS } from "../../../utils";
 
 const url = "/admin/sucursales";
 
@@ -25,10 +26,23 @@ const columns: GridColDef[] = [
       );
     },
   },
-  { field: "nombre", headerName: "Nombre", width: 250 },
-  { field: "departamento", headerName: "Departamento", width: 135 },
-  { field: "municipio", headerName: "Municipio", width: 135 },
-  { field: "direccion", headerName: "Dirección", width: 135 },
+  { field: "nombre", headerName: "Nombre", flex: 1.8, minWidth: 250 },
+  {
+    field: "departamento",
+    headerName: "Departamento",
+    valueFormatter: (e) =>
+      DEPARTAMENTOS.find(({ id }) => id == e.value)?.nombre,
+    flex: 1,
+    minWidth: 120,
+  },
+  {
+    field: "municipio",
+    headerName: "Municipio",
+    valueFormatter: (e) => MUNICIPIOS.find(({ id }) => id == e.value)?.nombre,
+    flex: 1,
+    minWidth: 120,
+  },
+  { field: "direccion", headerName: "Dirección", flex: 1, minWidth: 120 },
   {
     field: "telefono",
     headerName: "Teléfono",
