@@ -15,7 +15,7 @@ import db from "./configFirebase";
 import bcrypt from "bcryptjs";
 import { UiContext } from "../context/ui";
 
-type ICollection = "usuarios" | "tipoProductos" | "sucursales";
+type ICollection = "usuarios" | "tipoProductos" | "sucursales" | "paquetes";
 interface IUseFirebase {
   _collection: ICollection;
   _id?: string;

@@ -9,7 +9,9 @@ interface IProps {
   name: string;
   props: any;
   errors: any;
-  simbol: string;
+  simbol?: string;
+  error?: any;
+  helperText?: any;
 }
 
 export const InputNumber = ({
@@ -18,6 +20,8 @@ export const InputNumber = ({
   props,
   errors,
   simbol = "",
+  error,
+  helperText,
 }: IProps): JSX.Element => {
   return (
     <div className="col-sm-6 my-2 px-3 px-sm-1 px-md-1 px-lg-3">
@@ -26,13 +30,18 @@ export const InputNumber = ({
         <FilledInput
           type="number"
           {...props}
-          error={!!errors[name]}
+          error={error || !!errors[name]}
           startAdornment={
-            <InputAdornment position="start">{simbol}</InputAdornment>
+            simbol ? (
+              <InputAdornment position="start">{simbol}</InputAdornment>
+            ) : null
           }
         />
-        <FormHelperText disabled={!!errors[name]} className="Mui-error">
-          {errors[name]?.message}
+        <FormHelperText
+          disabled={error || !!errors[name]}
+          className="Mui-error"
+        >
+          {helperText || errors[name]?.message}
         </FormHelperText>
       </FormControl>
     </div>

@@ -1,4 +1,4 @@
-export interface IUser {
+export interface IUsuario {
   nombre: string;
   telefono: string;
   departamento: string;

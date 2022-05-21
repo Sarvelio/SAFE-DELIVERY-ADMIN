@@ -7,6 +7,8 @@ interface IProps {
   props?: any;
   register: any;
   errors: any;
+  error?: any;
+  helperText?: any;
 }
 
 export const InputTextField = ({
@@ -16,6 +18,8 @@ export const InputTextField = ({
   props,
   register,
   errors,
+  error,
+  helperText,
 }: IProps): JSX.Element => {
   const Props = () => {
     return props
@@ -35,8 +39,8 @@ export const InputTextField = ({
         variant="filled"
         fullWidth
         {...Props()}
-        error={!!errors[name]}
-        helperText={errors[name]?.message}
+        error={error || !!errors[name]}
+        helperText={helperText || errors[name]?.message}
       />
     </div>
   );

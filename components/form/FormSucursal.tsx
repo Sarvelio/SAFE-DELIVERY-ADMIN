@@ -98,7 +98,7 @@ export const FormSucursal: FC<props> = ({
             />
             <InputSelect
               name="municipio"
-              title="Departamento"
+              title="Municipio"
               items={MUNICIPIOS.filter(
                 ({ departamento }) => departamento == watch("departamento")
               )}

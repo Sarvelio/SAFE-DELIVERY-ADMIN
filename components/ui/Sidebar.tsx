@@ -33,6 +33,9 @@ export const Sidebar = ({ children }: { children: JSX.Element }) => {
     { path: "/admin/usuarios", name: "Usuarios" },
     { path: "/admin/tipo-productos", name: "Tipo de productos" },
     { path: "/admin/sucursales", name: "Sucursales" },
+    { path: "/paquetes/estado/en-oficina", name: "Paquetes en oficina" },
+    { path: "/paquetes/estado/en-ruta", name: "Paquetes en ruta" },
+    { path: "/paquetes/estado/entregado", name: "Paquetes entregado" },
   ];
   const validpath = (path: string) => {
     if (path === "/") {

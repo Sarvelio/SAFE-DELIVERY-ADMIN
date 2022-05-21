@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
-import { useFirebase } from "../../../firebase";
-import { FormUsuario } from "../../../components";
-import { IUsuario } from "../../../interfaces";
+import { useFirebase } from "../../firebase";
+import { FormPaquete } from "../../components";
+import { IPaquete } from "../../interfaces";
 
 const CreatePage = () => {
   const router = useRouter();
@@ -14,8 +14,7 @@ const CreatePage = () => {
     loading,
     deleteData,
   } = useFirebase({
-    _collection: "usuarios",
-    unique: ["correo", "nombre"],
+    _collection: "paquetes",
     _id:
       router.query.id?.length == 20 ? (router.query.id as string) : undefined,
     read: router.query.id?.length == 20,
@@ -26,23 +25,19 @@ const CreatePage = () => {
       {router.query.id?.length == 20 ? (
         <>
           {!loading && data && (
-            <FormUsuario
+            <FormPaquete
               errorData={errorData}
               sendData={sendData}
               loadingCUD={loadingCUD}
               navigateTo={navigateTo}
-              data={{
-                ...(data as unknown as IUsuario),
-                contrasena: "",
-              }}
-              currentPassword={(data as unknown as IUsuario).contrasena}
+              data={data as unknown as IPaquete}
               editar
               deleteData={deleteData}
             />
           )}
         </>
       ) : (
-        <FormUsuario
+        <FormPaquete
           errorData={errorData}
           sendData={sendData}
           loadingCUD={loadingCUD}

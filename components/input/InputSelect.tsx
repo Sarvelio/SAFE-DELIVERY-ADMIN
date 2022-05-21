@@ -13,6 +13,8 @@ interface IProps {
   errors: any;
   clearErrors: any;
   watch: any;
+  error?: any;
+  helperText?: any;
 }
 
 export const InputSelect = ({
@@ -23,6 +25,8 @@ export const InputSelect = ({
   props,
   clearErrors,
   watch,
+  error,
+  helperText,
 }: IProps): JSX.Element => {
   return (
     <div className="col-sm-6 my-2 px-3 px-sm-1 px-md-1 px-lg-3">
@@ -34,7 +38,7 @@ export const InputSelect = ({
             clearErrors(name);
           }}
           value={watch(name)}
-          error={!!errors[name]}
+          error={error || !!errors[name]}
         >
           <MenuItem value="">
             <em>Ninguno</em>
@@ -45,8 +49,11 @@ export const InputSelect = ({
             </MenuItem>
           ))}
         </Select>
-        <FormHelperText disabled={!!errors[name]} className="Mui-error">
-          {errors[name]?.message}
+        <FormHelperText
+          disabled={error || !!errors[name]}
+          className="Mui-error"
+        >
+          {helperText || errors[name]?.message}
         </FormHelperText>
       </FormControl>
     </div>

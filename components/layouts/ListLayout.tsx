@@ -11,6 +11,7 @@ interface Props {
   loading: boolean;
   columns: GridColDef[];
   data: [];
+  refresh?: any;
 }
 
 export const ListLayout: FC<Props> = ({
@@ -20,6 +21,7 @@ export const ListLayout: FC<Props> = ({
   columns,
   urlCreate,
   titleCreate = "Agregar",
+  refresh,
 }) => {
   return (
     <div className="container-web py-3 px-3 px-sm-4 px-md-2">
@@ -27,13 +29,28 @@ export const ListLayout: FC<Props> = ({
         <div className="col-12 d-flex">
           <h3>{title}</h3>
         </div>
-        {urlCreate && (
+        {(urlCreate || refresh) && (
           <div className="col-12 d-flex">
-            <span className="ms-auto mb-3">
-              <NextLink href={urlCreate} passHref>
-                <button className="btn btn-warning px-4">{titleCreate}</button>
-              </NextLink>
-            </span>
+            {refresh && (
+              <span className="me-auto mb-3">
+                <button
+                  type="button"
+                  onClick={refresh}
+                  className="btn bg-secondary text-white px-4"
+                >
+                  Refrescar
+                </button>
+              </span>
+            )}
+            {urlCreate && (
+              <span className="ms-auto mb-3">
+                <NextLink href={urlCreate} passHref>
+                  <button className="btn btn-warning px-4">
+                    {titleCreate}
+                  </button>
+                </NextLink>
+              </span>
+            )}
           </div>
         )}
         <div

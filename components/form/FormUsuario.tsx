@@ -11,7 +11,7 @@ import FormControl from "@mui/material/FormControl";
 import FormHelperText from "@mui/material/FormHelperText";
 import { ModalDelete } from "../modal/ModalDelete";
 
-import { IUser } from "../../interfaces";
+import { IUsuario } from "../../interfaces";
 
 import bcrypt from "bcryptjs";
 import MenuItem from "@mui/material/MenuItem";
@@ -30,7 +30,7 @@ interface props {
   currentPassword?: string;
   errorData: string;
   loadingCUD: boolean;
-  data?: IUser;
+  data?: IUsuario;
   editar?: boolean;
   deleteData?: (
     _idDelete?: string,
@@ -57,7 +57,7 @@ export const FormUsuario: FC<props> = ({
     getValues,
     setValue,
     watch,
-  } = useForm<IUser>({
+  } = useForm<IUsuario>({
     defaultValues: data,
   });
 
@@ -67,7 +67,7 @@ export const FormUsuario: FC<props> = ({
     navigateTo("/admin/usuarios");
   };
 
-  const onRegisterForm = (formData: IUser) => {
+  const onRegisterForm = (formData: IUsuario) => {
     sendData(
       editar
         ? {

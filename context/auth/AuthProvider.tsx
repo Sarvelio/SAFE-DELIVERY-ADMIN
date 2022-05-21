@@ -7,11 +7,11 @@ import Cookies from "js-cookie";
 
 import { AuthContext, authReducer } from "./";
 
-import { IUser } from "../../interfaces";
+import { IUsuario } from "../../interfaces";
 
 export interface AuthState {
   isLoggedIn: boolean;
-  user?: IUser;
+  user?: IUsuario;
 }
 
 const AUTH_INITIAL_STATE: AuthState = {
@@ -28,7 +28,7 @@ export const AuthProvider: FC<IProps> = ({ children }) => {
 
   useEffect(() => {
     if (status === "authenticated") {
-      dispatch({ type: "[Auth] - Login", payload: data?.user as IUser });
+      dispatch({ type: "[Auth] - Login", payload: data?.user as IUsuario });
       setInitializing(false);
     } else if (status === "unauthenticated") {
       setInitializing(false);
