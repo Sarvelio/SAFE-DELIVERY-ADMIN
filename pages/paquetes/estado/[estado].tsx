@@ -22,33 +22,64 @@ const columns: GridColDef[] = [
     renderCell: (params: GridValueGetterParams) => {
       return (
         <NextLink href={`${url}/${params.row.id}`}>
-          <button className="btn btn-secondary btn-sm">Editar</button>
+          <button className="btn btn-secondary btn-sm" style={{ width: 65 }}>
+            {params.row.estado == "en-oficina" ? "Editar" : "Ver"}
+          </button>
         </NextLink>
       );
     },
   },
-  { field: "nombre", headerName: "Nombre", flex: 1.8, minWidth: 250 },
   {
-    field: "departamento",
-    headerName: "Departamento",
-    valueFormatter: (e) =>
-      DEPARTAMENTOS.find(({ id }) => id == e.value)?.nombre,
-    flex: 1,
-    minWidth: 120,
+    field: "peso",
+    headerName: "Peso",
+    width: 100,
+    valueFormatter: (e) => e.value + " Libras",
   },
   {
-    field: "municipio",
-    headerName: "Municipio",
-    valueFormatter: (e) => MUNICIPIOS.find(({ id }) => id == e.value)?.nombre,
-    flex: 1,
-    minWidth: 120,
+    field: "tipoProducto",
+    headerName: "Tipo Producto",
+    valueFormatter: (e) => e.value.nombre,
+    width: 125,
   },
-  { field: "direccion", headerName: "Dirección", flex: 1, minWidth: 120 },
   {
-    field: "telefono",
-    headerName: "Teléfono",
-    width: 135,
-    valueFormatter: (e) => "+502 " + e.value,
+    field: "totalPagar",
+    headerName: "Total a pagar",
+    width: 100,
+    valueFormatter: (e) => "Q " + e.value,
+  },
+  {
+    field: "emisor",
+    headerName: "Emisor",
+    valueFormatter: ({ value }) => {
+      const { nombre, departamento, municipio, direccion, telefono } = value;
+      return `${nombre}, ${telefono} de ${
+        DEPARTAMENTOS.find(({ id }) => id == departamento)?.nombre
+      }, ${MUNICIPIOS.find(({ id }) => id == municipio)?.nombre}, ${direccion}`;
+    },
+    flex: 1,
+    minWidth: 250,
+    sortable: false,
+    hide: false,
+  },
+  {
+    field: "receptor",
+    headerName: "Receptor",
+    valueFormatter: ({ value }) => {
+      const { nombre, departamento, municipio, direccion, telefono } = value;
+      return `${nombre}, ${telefono} de ${
+        DEPARTAMENTOS.find(({ id }) => id == departamento)?.nombre
+      }, ${MUNICIPIOS.find(({ id }) => id == municipio)?.nombre}, ${direccion}`;
+    },
+    flex: 1,
+    minWidth: 250,
+    sortable: false,
+    hide: false,
+  },
+  {
+    field: "estado",
+    headerName: "",
+    width: 1,
+    valueFormatter: (e) => "",
   },
 ];
 const ListPage: NextPage = () => {
@@ -77,6 +108,15 @@ const ListPage: NextPage = () => {
         setRefresh(true);
       }}
       urlCreate={"en-oficina" === router.query.estado ? `${url}/create` : ""}
+      filterModel={{
+        items: [
+          {
+            columnField: "estado",
+            operatorValue: "contains",
+            value: router.query.estado,
+          },
+        ],
+      }}
     />
   );
 };

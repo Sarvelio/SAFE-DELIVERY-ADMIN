@@ -64,7 +64,7 @@ const columns: GridColDef[] = [
     minWidth: 120,
   },
   { field: "direccion", headerName: "Dirección", flex: 1, minWidth: 120 },
-  { field: "rol", headerName: "Rol", width: 110 },
+  { field: "rol", headerName: "", width: 1, valueFormatter: (e) => "" },
 ];
 const ListPage: NextPage = () => {
   const { data, loading } = useFirebase({

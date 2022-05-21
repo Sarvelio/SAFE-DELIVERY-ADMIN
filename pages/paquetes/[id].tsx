@@ -39,6 +39,7 @@ const CreatePage = () => {
               editar
               deleteData={deleteData}
               tipoProducto={tipoProducto}
+              onlyRead={(data as unknown as IPaquete).estado != "en-oficina"}
             />
           )}
         </>

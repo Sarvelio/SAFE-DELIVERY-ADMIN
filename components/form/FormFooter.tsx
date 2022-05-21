@@ -5,6 +5,7 @@ interface IProps {
   setOpen: any;
   loadingCUD: boolean;
   _navigateTo: () => void;
+  onlyRead?: boolean;
 }
 
 const FormFooter = ({
@@ -13,6 +14,7 @@ const FormFooter = ({
   loadingCUD,
   _navigateTo,
   setOpen,
+  onlyRead = false,
 }: IProps) => {
   return (
     <>
@@ -21,7 +23,7 @@ const FormFooter = ({
           {errorData}
         </div>
       )}
-      {editar && (
+      {!onlyRead && editar && (
         <button
           className="btn btn-outline-danger mx-0 my-2 px-4"
           type="button"
@@ -41,16 +43,18 @@ const FormFooter = ({
           style={{ minWidth: 150 }}
           onClick={_navigateTo}
         >
-          Cancelar
+          {onlyRead ? "Salir" : "Cancelar"}
         </button>
-        <button
-          className="btn btn-warning mx-sm-2 mt-2 px-4 "
-          type="submit"
-          disabled={loadingCUD}
-          style={{ minWidth: 150 }}
-        >
-          {editar ? "Editar" : "Guardar"}
-        </button>
+        {!onlyRead && (
+          <button
+            className="btn btn-warning mx-sm-2 mt-2 px-4 "
+            type="submit"
+            disabled={loadingCUD}
+            style={{ minWidth: 150 }}
+          >
+            {editar ? "Editar" : "Guardar"}
+          </button>
+        )}
       </div>
     </>
   );

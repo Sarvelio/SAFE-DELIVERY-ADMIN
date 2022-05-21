@@ -33,6 +33,7 @@ interface props {
   tipoProducto: ITipoProducto[];
   data?: IPaquete;
   editar?: boolean;
+  onlyRead?: boolean;
   deleteData?: (
     _idDelete?: string,
     callBack?: (() => void) | undefined,
@@ -54,6 +55,7 @@ export const FormPaquete: FC<props> = ({
     estado: PAQUETES[0].id,
   },
   editar = false,
+  onlyRead = false,
   deleteData,
 }) => {
   const {
@@ -196,7 +198,10 @@ export const FormPaquete: FC<props> = ({
   };
 
   return (
-    <CreateLayout title={` ${editar ? "Editar" : "Crear"} paquete`}>
+    <CreateLayout
+      title={` ${editar ? "Editar" : "Crear"} paquete`}
+      onlyRead={onlyRead}
+    >
       <form onSubmit={handleSubmit(onRegisterForm)} noValidate>
         <ModalDelete
           eliminar={() => {
@@ -280,7 +285,14 @@ export const FormPaquete: FC<props> = ({
           </div>
 
           <FormFooter
-            {...{ errorData, editar, loadingCUD, _navigateTo, setOpen }}
+            {...{
+              errorData,
+              editar,
+              loadingCUD,
+              _navigateTo,
+              setOpen,
+              onlyRead,
+            }}
           />
         </div>
       </form>
