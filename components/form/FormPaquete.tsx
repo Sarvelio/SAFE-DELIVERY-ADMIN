@@ -18,6 +18,8 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { DEPARTAMENTOS, MUNICIPIOS } from "../../utils";
 import { InputSelect, InputTextField, InputNumber } from "../input";
 import FormFooter from "./FormFooter";
+import { ITipoProducto } from "../../interfaces/tipoProducto";
+import { PAQUETES } from "../../utils/paquetes";
 
 interface props {
   sendData: (
@@ -28,6 +30,7 @@ interface props {
   navigateTo: (url: string) => void;
   errorData: string;
   loadingCUD: boolean;
+  tipoProducto: ITipoProducto[];
   data?: IPaquete;
   editar?: boolean;
   deleteData?: (
@@ -41,11 +44,14 @@ export const FormPaquete: FC<props> = ({
   errorData,
   sendData,
   loadingCUD,
+  tipoProducto,
   navigateTo,
   data = {
-    emisor: { departamento: "01", municipio: "011" },
+    emisor: { departamento: "", municipio: "" },
     receptor: { departamento: "", municipio: "" },
     tipoProducto: { id: "" },
+    totalPagar: 0,
+    estado: PAQUETES[0].id,
   },
   editar = false,
   deleteData,
@@ -69,9 +75,42 @@ export const FormPaquete: FC<props> = ({
   };
 
   const onRegisterForm = (formData: IPaquete) => {
-    // sendData(formData, _navigateTo);
-    console.log("formData", formData);
+    sendData(formData, _navigateTo);
   };
+
+  useEffect(() => {
+    const subscription = watch((value, { name, type }) => {
+      if (name === "peso" || name === "tipoProducto") {
+        if (value.peso?.trim() && value?.tipoProducto?.precioPorLibra) {
+          const _pesoLibra = Number(value.peso?.trim());
+          const _precioPorLibra = Number(value.tipoProducto?.precioPorLibra);
+          const entero = Math.trunc(_pesoLibra);
+          let newTotal: number = 0;
+          switch (true) {
+            case _pesoLibra == entero:
+              newTotal = entero * _precioPorLibra;
+              break;
+            case _pesoLibra < entero + 0.25:
+              newTotal = (entero + 0.25) * _precioPorLibra;
+              break;
+            case _pesoLibra < entero + 0.5:
+              newTotal = (entero + 0.5) * _precioPorLibra;
+              break;
+            case _pesoLibra < entero + 0.75:
+              newTotal = (entero + 0.75) * _precioPorLibra;
+              break;
+            default:
+              newTotal = (entero + 1) * _precioPorLibra;
+              break;
+          }
+          setValue("totalPagar", Math.round(newTotal));
+        } else {
+          setValue("totalPagar", 0);
+        }
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [watch, setValue]);
 
   const Cliente = (clave = "") => {
     return (
@@ -104,7 +143,8 @@ export const FormPaquete: FC<props> = ({
             }),
             onChange: (e: any) => {
               // @ts-ignore
-              setValue(`${clave}.municipio`, ""); // @ts-ignore
+              setValue(`${clave}.municipio`, "");
+              // @ts-ignore
               setValue(`${clave}.departamento`, e.target.value);
             },
           }}
@@ -195,18 +235,22 @@ export const FormPaquete: FC<props> = ({
                     clearErrors("tipoProducto.id");
                   }}
                   value={watch("tipoProducto")?.id}
+                  onChange={(e) => {
+                    setValue(
+                      "tipoProducto",
+                      tipoProducto.find(
+                        (a) => e.target.value == a.id
+                      ) as ITipoProducto
+                    );
+                  }}
                   error={!!errors.tipoProducto?.id}
                 >
-                  <MenuItem value="">
-                    <em>Ninguno</em>
-                  </MenuItem>
-                  {[
-                    {
-                      nombre: "a",
-                      precioPorLibra: "23.32",
-                      id: "fff",
-                    },
-                  ].map(({ id, nombre }) => (
+                  {!editar && (
+                    <MenuItem value="">
+                      <em>Ninguno</em>
+                    </MenuItem>
+                  )}
+                  {tipoProducto.map(({ id, nombre }) => (
                     <MenuItem value={id} key={id}>
                       {nombre}
                     </MenuItem>
@@ -223,7 +267,8 @@ export const FormPaquete: FC<props> = ({
 
             <div className="col-12 my-2 px-3 px-sm-1 px-md-1 px-lg-3">
               <h5>
-                <span className="fw-bold">Total a pagar:</span> Q234
+                <span className="fw-bold">Total a pagar: Q</span>
+                {watch("totalPagar")}
               </h5>
             </div>
             <h4 className="mt-3">Emisor</h4>
@@ -234,9 +279,9 @@ export const FormPaquete: FC<props> = ({
             {Cliente("receptor")}
           </div>
 
-          {/* <FormFooter
+          <FormFooter
             {...{ errorData, editar, loadingCUD, _navigateTo, setOpen }}
-          /> */}
+          />
         </div>
       </form>
     </CreateLayout>

@@ -20,11 +20,16 @@ const CreatePage = () => {
     read: router.query.id?.length == 20,
   });
 
+  const { data: tipoProducto, loading: loadingTipoProducto } = useFirebase({
+    _collection: "tipoProductos",
+    read: true,
+  });
+
   return (
     <>
       {router.query.id?.length == 20 ? (
         <>
-          {!loading && data && (
+          {!loading && !loadingTipoProducto && data && (
             <FormPaquete
               errorData={errorData}
               sendData={sendData}
@@ -33,16 +38,22 @@ const CreatePage = () => {
               data={data as unknown as IPaquete}
               editar
               deleteData={deleteData}
+              tipoProducto={tipoProducto}
             />
           )}
         </>
       ) : (
-        <FormPaquete
-          errorData={errorData}
-          sendData={sendData}
-          loadingCUD={loadingCUD}
-          navigateTo={navigateTo}
-        />
+        <>
+          {!loadingTipoProducto && (
+            <FormPaquete
+              errorData={errorData}
+              sendData={sendData}
+              loadingCUD={loadingCUD}
+              navigateTo={navigateTo}
+              tipoProducto={tipoProducto}
+            />
+          )}
+        </>
       )}
     </>
   );

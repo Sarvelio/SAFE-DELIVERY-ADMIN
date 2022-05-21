@@ -16,6 +16,6 @@ export interface IPaquete {
   receptor: ICliente;
 
   transportista?: IUsuario;
-  totalPagar: string;
+  totalPagar: number;
   estado: string;
 }
