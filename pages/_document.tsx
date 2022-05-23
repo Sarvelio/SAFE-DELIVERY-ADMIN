@@ -17,6 +17,10 @@ class MyDocument extends Document {
     return (
       <Html className="h-100">
         <Head>
+          <link rel="manifest" href="/manifest.json" />
+          <link rel="apple-touch-ico" href="/icon.png"></link>
+
+          <meta name="thema-color" content="#ffffff" />
           <link
             rel="stylesheet"
             href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
