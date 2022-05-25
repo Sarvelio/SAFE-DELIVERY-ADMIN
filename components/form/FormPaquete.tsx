@@ -15,7 +15,7 @@ import { IPaquete } from "../../interfaces";
 
 import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-import { DEPARTAMENTOS, MUNICIPIOS } from "../../utils";
+import { dateUtilis, DEPARTAMENTOS, MUNICIPIOS } from "../../utils";
 import { InputSelect, InputTextField, InputNumber } from "../input";
 import FormFooter from "./FormFooter";
 import { ITipoProducto } from "../../interfaces/tipoProducto";
@@ -209,7 +209,12 @@ export const FormPaquete: FC<props> = ({
       title={` ${editar ? "Editar" : "Crear"} paquete`}
       onlyRead={onlyRead}
     >
-      <form onSubmit={handleSubmit(onRegisterForm)} noValidate>
+      <form
+        onSubmit={handleSubmit((d) => {
+          console.log("fomrularioo", d);
+        })}
+        noValidate
+      >
         <ModalDelete
           eliminar={() => {
             // @ts-ignore
@@ -298,6 +303,14 @@ export const FormPaquete: FC<props> = ({
                 </div>
                 <div className="col-sm-6 my-2 px-3 px-sm-1 px-md-1 px-lg-3">
                   <h5> Teléfono: {getValues("transportista.telefono")}</h5>
+                </div>
+                <div className="col-sm-6 my-2 px-3 px-sm-1 px-md-1 px-lg-3">
+                  <h5> Correo: {getValues("transportista.correo")}</h5>
+                </div>
+                <div className="col-sm-6 my-2 px-3 px-sm-1 px-md-1 px-lg-3">
+                  <h5>
+                    Asignado: {dateUtilis.getDate(getValues("fechaEnRuta"))}
+                  </h5>
                 </div>
               </>
             )}

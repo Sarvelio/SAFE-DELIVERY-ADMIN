@@ -9,7 +9,7 @@ import { useFirebase } from "../../../firebase";
 
 import NextLink from "next/link";
 import { ListLayout } from "../../../components";
-import { DEPARTAMENTOS, MUNICIPIOS } from "../../../utils";
+import { dateUtilis, DEPARTAMENTOS, MUNICIPIOS } from "../../../utils";
 import { useRouter } from "next/router";
 import { PAQUETES } from "../../../utils";
 import { ModalTrasportista } from "../../../components/modal";
@@ -89,6 +89,26 @@ const columns: GridColDef[] = [
     valueFormatter: (e) => "",
   },
 ];
+const columns2: GridColDef[] = [
+  {
+    field: "fechaEnRuta",
+    headerName: "Fecha asignado",
+    valueFormatter: ({ value }) => dateUtilis.getDate(value),
+    flex: 1,
+    minWidth: 150,
+    sortable: false,
+    hide: false,
+  },
+  {
+    field: "transportista",
+    headerName: "Transportista",
+    valueFormatter: ({ value }) => value?.nombre,
+    flex: 1,
+    minWidth: 200,
+    sortable: false,
+    hide: false,
+  },
+];
 const ListPage: NextPage = () => {
   const { user } = useContext(AuthContext);
 
@@ -133,7 +153,15 @@ const ListPage: NextPage = () => {
           ({ id }) => id === router.query.estado
         )?.nombre.toLowerCase()} `}
         loading={loading}
-        columns={columns}
+        columns={
+          "en-oficina" === router.query.estado
+            ? columns
+            : [
+                ...columns.slice(0, columns.length - 1),
+                ...columns2,
+                columns[columns.length - 1],
+              ]
+        }
         data={data}
         refresh={refresh}
         urlCreate={"en-oficina" === router.query.estado ? `${url}/create` : ""}

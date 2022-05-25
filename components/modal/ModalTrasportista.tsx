@@ -99,6 +99,7 @@ export const ModalTrasportista = ({
           ..._doc.data(),
           estado: PAQUETES[1].id,
           transportista: _transportista,
+          fechaEnRuta: new Date(),
         });
       });
 

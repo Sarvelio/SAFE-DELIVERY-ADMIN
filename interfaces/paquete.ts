@@ -1,3 +1,4 @@
+import { Timestamp } from "firebase/firestore";
 import { ITipoProducto } from "./tipoProducto";
 import { IUsuario } from "./user";
 
@@ -18,4 +19,7 @@ export interface IPaquete {
   transportista?: IUsuario;
   totalPagar: number;
   estado: string;
+
+  fechaEnRuta?: Timestamp;
+  fechaEntregado?: Timestamp;
 }
