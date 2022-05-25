@@ -27,16 +27,39 @@ export const Sidebar = ({ children }: { children: JSX.Element }) => {
   const [openMenu, setOpenMenu] = useState(true);
   const { asPath } = useRouter();
   const { isLoading } = useContext(UiContext);
+  useEffect(() => {
+    console.log("{user}", user);
+  }, [user]);
 
-  const urls = [
-    { path: "/", name: "Inicio" },
-    { path: "/admin/usuarios", name: "Usuarios" },
-    { path: "/admin/tipo-productos", name: "Tipo de productos" },
-    { path: "/admin/sucursales", name: "Sucursales" },
-    { path: "/paquetes/estado/en-oficina", name: "Paquetes en oficina" },
-    { path: "/paquetes/estado/en-ruta", name: "Paquetes en ruta" },
-    { path: "/paquetes/estado/entregado", name: "Paquetes entregado" },
-  ];
+  const urls =
+    user?.rol == "administrador"
+      ? [
+          { path: "/", name: "Inicio" },
+          { path: "/admin/usuarios", name: "Usuarios" },
+          { path: "/admin/tipo-productos", name: "Tipo de productos" },
+          { path: "/admin/sucursales", name: "Sucursales" },
+        ]
+      : user?.rol == "oficinista"
+      ? [
+          { path: "/", name: "Inicio" },
+          { path: "/paquetes/estado/en-oficina", name: "Paquetes en oficina" },
+          { path: "/paquetes/estado/en-ruta", name: "Paquetes en ruta" },
+          { path: "/paquetes/estado/entregado", name: "Paquetes entregado" },
+        ]
+      : user?.rol == "transportista"
+      ? [
+          { path: "/", name: "Inicio" },
+          {
+            path: "/transportista/estado/en-ruta",
+            name: "Paquetes en el trasporte",
+          },
+          {
+            path: "/transportista/estado/entregado",
+            name: "Paquetes entregados",
+          },
+        ]
+      : [];
+
   const validpath = (path: string) => {
     if (path === "/") {
       return path === asPath;

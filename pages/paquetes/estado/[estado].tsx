@@ -13,6 +13,8 @@ import { DEPARTAMENTOS, MUNICIPIOS } from "../../../utils";
 import { useRouter } from "next/router";
 import { PAQUETES } from "../../../utils";
 import { ModalTrasportista } from "../../../components/modal";
+import { useContext } from "react";
+import { AuthContext } from "../../../context";
 const url = "/paquetes";
 
 const columns: GridColDef[] = [
@@ -88,12 +90,15 @@ const columns: GridColDef[] = [
   },
 ];
 const ListPage: NextPage = () => {
+  const { user } = useContext(AuthContext);
+
   const router = useRouter();
   const [selectionModel, setSelectionModel] = useState<GridSelectionModel>([]);
   const [open, setOpen] = useState(false);
 
   const { data, loading, navigateTo, setRefresh } = useFirebase({
     _collection: "paquetes",
+    idSucursal: user!.sucursal!.id,
     read: true,
   });
 

@@ -1,3 +1,4 @@
+import { ISucursal } from "./sucursal";
 export interface IUsuario {
   nombre: string;
   telefono: string;
@@ -7,9 +8,7 @@ export interface IUsuario {
   correo: string;
   contrasena: string;
   rol: string;
+  sucursal?: ISucursal;
 
   id?: string;
-
-  email: string;
-  password?: string;
 }

@@ -19,6 +19,8 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { DEPARTAMENTOS, MUNICIPIOS, ROLES, validations } from "../../utils";
 import { InputSelect, InputTextField, InputNumber } from "../input";
 import FormFooter from "./FormFooter";
+import { useFirebase } from "../../firebase";
+import { ISucursal } from "../../interfaces/sucursal";
 
 interface props {
   sendData: (
@@ -44,7 +46,7 @@ export const FormUsuario: FC<props> = ({
   sendData,
   loadingCUD,
   navigateTo,
-  data = { departamento: "", municipio: "", rol: "" },
+  data = { departamento: "", municipio: "", rol: "", sucursal: { id: "" } },
   editar = false,
   deleteData,
   currentPassword = "",
@@ -60,6 +62,13 @@ export const FormUsuario: FC<props> = ({
   } = useForm<IUsuario>({
     defaultValues: data,
   });
+  const { data: dataSucursales, loading } = useFirebase({
+    _collection: "sucursales",
+    read: true,
+  });
+  useEffect(() => {
+    console.log("dataSucursales", dataSucursales);
+  }, [dataSucursales]);
 
   const [open, setOpen] = useState(false);
 
@@ -191,6 +200,52 @@ export const FormUsuario: FC<props> = ({
               }}
               {...{ errors, watch, clearErrors }}
             />
+            {Object.keys(dataSucursales).length > 0 &&
+              watch("rol") == ROLES[1].id && (
+                <div className="col-sm-6 my-2 px-3 px-sm-1 px-md-1 px-lg-3">
+                  <FormControl
+                    fullWidth
+                    sx={{ m: 1 }}
+                    variant="filled"
+                    className="m-0"
+                  >
+                    <InputLabel>Tipo de producto</InputLabel>
+                    <Select
+                      {...register("sucursal.id", {
+                        required: "Este campo es requerido",
+                      })}
+                      onFocus={() => {
+                        clearErrors("sucursal.id");
+                      }}
+                      value={watch("sucursal")?.id}
+                      onChange={(e) => {
+                        setValue(
+                          "sucursal",
+                          dataSucursales.find(
+                            (a) => e.target.value == (a as ISucursal).id
+                          ) as unknown as ISucursal
+                        );
+                      }}
+                      error={!!errors.sucursal?.id}
+                    >
+                      <MenuItem value="">
+                        <em>Ninguno</em>
+                      </MenuItem>
+                      {dataSucursales.map(({ id, nombre }) => (
+                        <MenuItem value={id} key={id}>
+                          {nombre}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    <FormHelperText
+                      disabled={!!errors.sucursal?.id}
+                      className="Mui-error"
+                    >
+                      {errors.sucursal?.id?.message}
+                    </FormHelperText>
+                  </FormControl>
+                </div>
+              )}
           </div>
 
           <FormFooter

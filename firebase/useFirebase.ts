@@ -21,12 +21,14 @@ interface IUseFirebase {
   _id?: string;
   read?: boolean;
   unique?: string[];
+  idSucursal?: string;
 }
 const useFirebase = ({
   _collection,
   _id,
   read = false,
   unique = [],
+  idSucursal = "",
 }: IUseFirebase) => {
   const { yesLoading, noLoading } = useContext(UiContext);
 
@@ -67,7 +69,14 @@ const useFirebase = ({
   }, [loading, loadingCUD]);
 
   const getListData = async (): Promise<[]> => {
-    const _docs = await getDocs(collection(db, _collection));
+    const _docs = idSucursal
+      ? await getDocs(
+          query(
+            collection(db, _collection),
+            where("idSucursal", "==", idSucursal)
+          )
+        )
+      : await getDocs(collection(db, _collection));
     const response: any = [];
     _docs.forEach((_doc) => {
       response.push({ id: _doc.id, ..._doc.data() });

@@ -1,4 +1,4 @@
-import { FC, useState, useEffect } from "react";
+import { FC, useState, useEffect, useContext } from "react";
 
 import { useForm } from "react-hook-form";
 import { TextField, Button } from "@mui/material";
@@ -20,6 +20,7 @@ import { InputSelect, InputTextField, InputNumber } from "../input";
 import FormFooter from "./FormFooter";
 import { ITipoProducto } from "../../interfaces/tipoProducto";
 import { PAQUETES } from "../../utils/paquetes";
+import { AuthContext } from "../../context";
 
 interface props {
   sendData: (
@@ -58,6 +59,8 @@ export const FormPaquete: FC<props> = ({
   onlyRead = false,
   deleteData,
 }) => {
+  const { user } = useContext(AuthContext);
+
   const {
     register,
     handleSubmit,
@@ -77,7 +80,11 @@ export const FormPaquete: FC<props> = ({
   };
 
   const onRegisterForm = (formData: IPaquete) => {
-    sendData(formData, _navigateTo);
+    if (editar) {
+      sendData(formData, _navigateTo);
+    } else {
+      sendData({ ...formData, idSucursal: user!.sucursal!.id }, _navigateTo);
+    }
   };
 
   useEffect(() => {
