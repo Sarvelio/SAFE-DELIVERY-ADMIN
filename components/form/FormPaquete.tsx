@@ -282,8 +282,19 @@ export const FormPaquete: FC<props> = ({
             <h4 className="mt-3">Receptor</h4>
             <hr className="mb-1" />
             {Cliente("receptor")}
+            {getValues("transportista") && (
+              <>
+                <h4 className="mt-3">Trasportista asignado:</h4>
+                <hr className="mb-1" />
+                <div className="col-sm-6 my-2 px-3 px-sm-1 px-md-1 px-lg-3">
+                  <h5> Nombre: {getValues("transportista.nombre")}</h5>
+                </div>
+                <div className="col-sm-6 my-2 px-3 px-sm-1 px-md-1 px-lg-3">
+                  <h5> Teléfono: {getValues("transportista.telefono")}</h5>
+                </div>
+              </>
+            )}
           </div>
-
           <FormFooter
             {...{
               errorData,

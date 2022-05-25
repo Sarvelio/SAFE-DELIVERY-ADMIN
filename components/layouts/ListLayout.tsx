@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import Head from "next/head";
 import { Box, Button } from "@mui/material";
 import NextLink from "next/link";
@@ -8,6 +8,7 @@ import {
   GridToolbar,
   GridColDef,
   GridFilterModel,
+  GridSelectionModel,
 } from "@mui/x-data-grid";
 
 interface Props {
@@ -19,6 +20,10 @@ interface Props {
   data: [];
   refresh?: any;
   filterModel?: GridFilterModel;
+  checkboxSelection?: boolean;
+  setSelectionModel?: any;
+  setOpen?: any;
+  selectionModel?: GridSelectionModel;
 }
 
 export const ListLayout: FC<Props> = ({
@@ -29,7 +34,11 @@ export const ListLayout: FC<Props> = ({
   urlCreate,
   titleCreate = "Agregar",
   refresh,
+  checkboxSelection = false,
   filterModel = { items: [] },
+  setSelectionModel,
+  setOpen,
+  selectionModel = [],
 }) => {
   return (
     <div className="container-web py-3 px-3 px-sm-4 px-md-2">
@@ -40,15 +49,17 @@ export const ListLayout: FC<Props> = ({
         {(urlCreate || refresh) && (
           <div className="col-12 d-flex">
             {refresh && (
-              <span className="me-auto mb-3">
-                <button
-                  type="button"
-                  onClick={refresh}
-                  className="btn bg-secondary text-white px-4"
-                >
-                  Refrescar
-                </button>
-              </span>
+              <>
+                <span className="me-auto mb-3">
+                  <button
+                    type="button"
+                    onClick={refresh}
+                    className="btn bg-primary text-white px-4"
+                  >
+                    Refrescar
+                  </button>
+                </span>
+              </>
             )}
             {urlCreate && (
               <span className="ms-auto mb-3">
@@ -61,11 +72,32 @@ export const ListLayout: FC<Props> = ({
             )}
           </div>
         )}
+        {checkboxSelection && (
+          <span className="me-auto mb-3">
+            <button
+              type="button"
+              onClick={() => {
+                setOpen(true);
+              }}
+              className="btn bg-secondary text-white px-4"
+              disabled={selectionModel.length < 1}
+            >
+              Asignar Trasporte
+            </button>
+          </span>
+        )}
+
         <div
           className="col-12 d-inline shadow px-0"
           style={{ height: "667px" }}
         >
           <DataGrid
+            checkboxSelection={checkboxSelection}
+            onSelectionModelChange={(newSelectionModel) => {
+              if (checkboxSelection) {
+                setSelectionModel(newSelectionModel);
+              }
+            }}
             localeText={esES.components.MuiDataGrid.defaultProps.localeText}
             rows={data}
             columns={columns}

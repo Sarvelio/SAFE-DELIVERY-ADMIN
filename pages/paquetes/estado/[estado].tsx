@@ -1,6 +1,10 @@
 import type { NextPage } from "next";
-import React, { useEffect } from "react";
-import { GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
+import React, { useEffect, useState } from "react";
+import {
+  GridColDef,
+  GridValueGetterParams,
+  GridSelectionModel,
+} from "@mui/x-data-grid";
 import { useFirebase } from "../../../firebase";
 
 import NextLink from "next/link";
@@ -8,6 +12,7 @@ import { ListLayout } from "../../../components";
 import { DEPARTAMENTOS, MUNICIPIOS } from "../../../utils";
 import { useRouter } from "next/router";
 import { PAQUETES } from "../../../utils";
+import { ModalTrasportista } from "../../../components/modal";
 const url = "/paquetes";
 
 const columns: GridColDef[] = [
@@ -84,6 +89,8 @@ const columns: GridColDef[] = [
 ];
 const ListPage: NextPage = () => {
   const router = useRouter();
+  const [selectionModel, setSelectionModel] = useState<GridSelectionModel>([]);
+  const [open, setOpen] = useState(false);
 
   const { data, loading, navigateTo, setRefresh } = useFirebase({
     _collection: "paquetes",
@@ -96,28 +103,46 @@ const ListPage: NextPage = () => {
     }
   }, [router.query.estado]);
 
+  const refresh = () => {
+    setSelectionModel([]);
+    setRefresh(true);
+  };
+
   return (
-    <ListLayout
-      title={`Paquetes ${PAQUETES.find(
-        ({ id }) => id === router.query.estado
-      )?.nombre.toLowerCase()} `}
-      loading={loading}
-      columns={columns}
-      data={data}
-      refresh={() => {
-        setRefresh(true);
-      }}
-      urlCreate={"en-oficina" === router.query.estado ? `${url}/create` : ""}
-      filterModel={{
-        items: [
-          {
-            columnField: "estado",
-            operatorValue: "contains",
-            value: router.query.estado,
-          },
-        ],
-      }}
-    />
+    <>
+      {open && (
+        <ModalTrasportista
+          open={true}
+          setOpen={setOpen}
+          selectionModel={selectionModel}
+          refresh={refresh}
+          navigateTo={navigateTo}
+        />
+      )}
+      <ListLayout
+        checkboxSelection={"en-oficina" === router.query.estado}
+        setSelectionModel={setSelectionModel}
+        selectionModel={selectionModel}
+        setOpen={setOpen}
+        title={`Paquetes ${PAQUETES.find(
+          ({ id }) => id === router.query.estado
+        )?.nombre.toLowerCase()} `}
+        loading={loading}
+        columns={columns}
+        data={data}
+        refresh={refresh}
+        urlCreate={"en-oficina" === router.query.estado ? `${url}/create` : ""}
+        filterModel={{
+          items: [
+            {
+              columnField: "estado",
+              operatorValue: "contains",
+              value: router.query.estado,
+            },
+          ],
+        }}
+      />
+    </>
   );
 };
 

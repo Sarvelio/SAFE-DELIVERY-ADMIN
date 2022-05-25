@@ -15,6 +15,7 @@ interface IProps {
   watch: any;
   error?: any;
   helperText?: any;
+  fullScreen?: boolean;
 }
 
 export const InputSelect = ({
@@ -27,9 +28,14 @@ export const InputSelect = ({
   watch,
   error,
   helperText,
+  fullScreen = false,
 }: IProps): JSX.Element => {
   return (
-    <div className="col-sm-6 my-2 px-3 px-sm-1 px-md-1 px-lg-3">
+    <div
+      className={`col-sm-${
+        fullScreen ? "12" : "6"
+      } my-2 px-3 px-sm-1 px-md-1 px-lg-3`}
+    >
       <FormControl fullWidth sx={{ m: 1 }} variant="filled" className="m-0">
         <InputLabel>{title}</InputLabel>
         <Select
