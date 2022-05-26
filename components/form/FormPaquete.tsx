@@ -52,6 +52,7 @@ export const FormPaquete: FC<props> = ({
   tipoProducto,
   navigateTo,
   data = {
+    fechaEntregado: "",
     emisor: { departamento: "", municipio: "" },
     receptor: { departamento: "", municipio: "" },
     tipoProducto: { id: "" },
@@ -326,6 +327,12 @@ export const FormPaquete: FC<props> = ({
                   </h5>
                 </div>
               </>
+            )}
+            {!!getValues("fechaEntregado") && (
+              <div className="alert alert-primary" role="alert">
+                El paquete se entrego:{" "}
+                {dateUtilis.getDate(getValues("fechaEntregado"))}
+              </div>
             )}
           </div>
           {esEntregarPaquete && (
