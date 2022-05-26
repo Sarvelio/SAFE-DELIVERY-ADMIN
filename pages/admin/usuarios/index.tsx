@@ -12,7 +12,7 @@ import { useFirebase } from "../../../firebase";
 import NextLink from "next/link";
 import { ListLayout } from "../../../components";
 import { useState } from "react";
-import { ROLES, DEPARTAMENTOS, MUNICIPIOS } from "../../../utils";
+import { ROLES, DEPARTAMENTOS, MUNICIPIOS, TYPE_ROLES } from "../../../utils";
 import {
   AppBar,
   Badge,
@@ -71,7 +71,7 @@ const ListPage: NextPage = () => {
     _collection: "usuarios",
     read: true,
   });
-  const [rol, setRol] = useState("administrador");
+  const [rol, setRol] = useState(TYPE_ROLES.administrador);
 
   return (
     <div className="container-web py-3 px-3 px-sm-4 px-md-2">

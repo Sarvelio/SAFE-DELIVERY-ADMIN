@@ -1,6 +1,6 @@
 import { NextFetchEvent, NextRequest, NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
-import { TYPE_ROLES } from "../../utils/roles";
+import { TYPE_ROLES } from "../../utils";
 
 export async function middleware(req: NextRequest | any, ev: NextFetchEvent) {
   const url = req.nextUrl.clone();
@@ -10,7 +10,7 @@ export async function middleware(req: NextRequest | any, ev: NextFetchEvent) {
     req,
     secret: process.env.NEXTAUTH_SECRET,
   });
-  if (session && session?.user?.rol == TYPE_ROLES.administrador) {
+  if (session && session?.user?.rol == TYPE_ROLES.transportista) {
     return NextResponse.next();
   }
   return NextResponse.redirect(url);

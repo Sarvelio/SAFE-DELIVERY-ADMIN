@@ -23,6 +23,7 @@ import {
 import db from "../../firebase/configFirebase";
 import { IPaquete } from "../../interfaces/paquete";
 import { PAQUETES } from "../../utils/paquetes";
+import { TYPE_ROLES } from "../../utils";
 
 interface IProps {
   transportista: string;
@@ -60,7 +61,10 @@ export const ModalTrasportista = ({
   useEffect(() => {
     const getTrasportistas = async () => {
       const _docs = await getDocs(
-        query(collection(db, "usuarios"), where("rol", "==", "transportista"))
+        query(
+          collection(db, "usuarios"),
+          where("rol", "==", TYPE_ROLES.transportista)
+        )
       );
       const response: any = [];
       _docs.forEach((_doc) => {

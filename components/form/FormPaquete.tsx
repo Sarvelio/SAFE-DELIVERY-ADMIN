@@ -9,7 +9,6 @@ import InputLabel from "@mui/material/InputLabel";
 import InputAdornment from "@mui/material/InputAdornment";
 import FormControl from "@mui/material/FormControl";
 import FormHelperText from "@mui/material/FormHelperText";
-import { ModalDelete } from "../modal/ModalDelete";
 
 import { IPaquete } from "../../interfaces";
 
@@ -21,6 +20,7 @@ import FormFooter from "./FormFooter";
 import { ITipoProducto } from "../../interfaces/tipoProducto";
 import { PAQUETES } from "../../utils/paquetes";
 import { AuthContext } from "../../context";
+import { ModalEntregarPaquete, ModalDelete } from "../modal";
 
 interface props {
   sendData: (
@@ -35,6 +35,9 @@ interface props {
   data?: IPaquete;
   editar?: boolean;
   onlyRead?: boolean;
+  esEntregarPaquete?: boolean;
+  entregarPaquete?: () => void;
+  transportista?: boolean;
   deleteData?: (
     _idDelete?: string,
     callBack?: (() => void) | undefined,
@@ -56,7 +59,10 @@ export const FormPaquete: FC<props> = ({
     estado: PAQUETES[0].id,
   },
   editar = false,
+  transportista = false,
   onlyRead = false,
+  esEntregarPaquete = false,
+  entregarPaquete,
   deleteData,
 }) => {
   const { user } = useContext(AuthContext);
@@ -74,12 +80,17 @@ export const FormPaquete: FC<props> = ({
   });
 
   const [open, setOpen] = useState(false);
+  const [openPaquete, setOpenPaquete] = useState(false);
 
   const _navigateTo = () => {
-    navigateTo("/paquetes/estado/en-oficina");
+    navigateTo(
+      transportista
+        ? "/transportista/estado/en-ruta"
+        : "/paquetes/estado/en-oficina"
+    );
   };
 
-  const onRegisterForm = (formData: IPaquete) => {
+  const onRegisterForm = (formData: any) => {
     if (editar) {
       sendData(formData, _navigateTo);
     } else {
@@ -206,15 +217,17 @@ export const FormPaquete: FC<props> = ({
 
   return (
     <CreateLayout
-      title={` ${editar ? "Editar" : "Crear"} paquete`}
+      title={` ${
+        !onlyRead ? `${editar ? "Editar" : "Crear"} paquete` : "Paquete"
+      } `}
       onlyRead={onlyRead}
     >
-      <form
-        onSubmit={handleSubmit((d) => {
-          console.log("fomrularioo", d);
-        })}
-        noValidate
-      >
+      <form onSubmit={handleSubmit(onRegisterForm)} noValidate>
+        <ModalEntregarPaquete
+          entregarPaquete={entregarPaquete!}
+          open={openPaquete}
+          setOpen={setOpenPaquete}
+        />
         <ModalDelete
           eliminar={() => {
             // @ts-ignore
@@ -315,6 +328,18 @@ export const FormPaquete: FC<props> = ({
               </>
             )}
           </div>
+          {esEntregarPaquete && (
+            <button
+              className="btn btn-info mx-0 my-2 px-4 text-white fw-bold"
+              type="button"
+              disabled={loadingCUD}
+              onClick={() => {
+                setOpenPaquete(true);
+              }}
+            >
+              ¡Entregar paquete!
+            </button>
+          )}
           <FormFooter
             {...{
               errorData,

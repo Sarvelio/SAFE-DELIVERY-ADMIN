@@ -22,6 +22,7 @@ interface IUseFirebase {
   read?: boolean;
   unique?: string[];
   idSucursal?: string;
+  idTransportista?: string;
 }
 const useFirebase = ({
   _collection,
@@ -29,6 +30,7 @@ const useFirebase = ({
   read = false,
   unique = [],
   idSucursal = "",
+  idTransportista = "",
 }: IUseFirebase) => {
   const { yesLoading, noLoading } = useContext(UiContext);
 
@@ -74,6 +76,13 @@ const useFirebase = ({
           query(
             collection(db, _collection),
             where("idSucursal", "==", idSucursal)
+          )
+        )
+      : idTransportista
+      ? await getDocs(
+          query(
+            collection(db, _collection),
+            where("transportista.id", "==", idTransportista)
           )
         )
       : await getDocs(collection(db, _collection));

@@ -21,6 +21,7 @@ import {
 } from "@mui/material";
 import { useRouter } from "next/router";
 import { UiContext } from "../../context/ui";
+import { TYPE_ROLES } from "../../utils/roles";
 
 export const Sidebar = ({ children }: { children: JSX.Element }) => {
   const { user, isLoggedIn, logout } = useContext(AuthContext);
@@ -32,21 +33,21 @@ export const Sidebar = ({ children }: { children: JSX.Element }) => {
   }, [user]);
 
   const urls =
-    user?.rol == "administrador"
+    user?.rol == TYPE_ROLES.administrador
       ? [
           { path: "/", name: "Inicio" },
           { path: "/admin/usuarios", name: "Usuarios" },
           { path: "/admin/tipo-productos", name: "Tipo de productos" },
           { path: "/admin/sucursales", name: "Sucursales" },
         ]
-      : user?.rol == "oficinista"
+      : user?.rol == TYPE_ROLES.oficinista
       ? [
           { path: "/", name: "Inicio" },
           { path: "/paquetes/estado/en-oficina", name: "Paquetes en oficina" },
           { path: "/paquetes/estado/en-ruta", name: "Paquetes en ruta" },
           { path: "/paquetes/estado/entregado", name: "Paquetes entregado" },
         ]
-      : user?.rol == "transportista"
+      : user?.rol == TYPE_ROLES.transportista
       ? [
           { path: "/", name: "Inicio" },
           {
