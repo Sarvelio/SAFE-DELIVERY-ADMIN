@@ -49,7 +49,6 @@ const LoginPage = () => {
           setShowError(true);
           setTimeout(() => setShowError(false), 3000);
         }
-        console.log("correcto", res);
       })
       .catch((error) => {
         console.log("--error--", error);

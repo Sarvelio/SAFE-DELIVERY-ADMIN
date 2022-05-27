@@ -19,6 +19,7 @@ import {
   deleteDoc,
   query,
   where,
+  documentId,
 } from "firebase/firestore";
 import db from "../../firebase/configFirebase";
 import { IPaquete } from "../../interfaces/paquete";
@@ -93,7 +94,7 @@ export const ModalTrasportista = ({
         query(
           collection(db, "paquetes"),
           where("estado", "==", PAQUETES[0].id),
-          where("id", "in", selectionModel)
+          where(documentId(), "in", selectionModel)
         )
       );
       const response: any = [];
