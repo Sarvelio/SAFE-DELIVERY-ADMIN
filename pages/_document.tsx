@@ -29,7 +29,7 @@ class MyDocument extends Document {
         <body className="d-flex flex-column h-100 ">
           <Main />
 
-          <footer
+          {/* <footer
             className="py-0 my-0 text-center text-light mt-auto d-none d-md-block"
             style={{ height: "60px" }}
           >
@@ -47,7 +47,7 @@ class MyDocument extends Document {
                 </li>
               </ul>
             </div>
-          </footer>
+          </footer> */}
           <NextScript />
         </body>
       </Html>

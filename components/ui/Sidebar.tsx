@@ -72,12 +72,12 @@ export const Sidebar = ({ children }: { children: JSX.Element }) => {
     <div className="container-web mx-auto px-0">
       <div
         className="d-flex bg-movil position-relative "
-        style={{ minHeight: "calc(100vh - 58px)" }}
+        style={{ minHeight: "100vh" }}
       >
         <div
           style={{
             width: "280px",
-            minHeight: "calc(100vh - 58px) ",
+            minHeight: "100vh ",
             zIndex: 2,
           }}
           className={`d-none d-md-block ${openMenu ? "sidebar-active" : ""}`}
