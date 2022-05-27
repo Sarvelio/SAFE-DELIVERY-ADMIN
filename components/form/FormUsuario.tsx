@@ -209,7 +209,7 @@ export const FormUsuario: FC<props> = ({
                     variant="filled"
                     className="m-0"
                   >
-                    <InputLabel>Tipo de producto</InputLabel>
+                    <InputLabel>Sucursal</InputLabel>
                     <Select
                       {...register("sucursal.id", {
                         required: "Este campo es requerido",

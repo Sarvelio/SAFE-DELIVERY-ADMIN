@@ -30,7 +30,7 @@ class MyDocument extends Document {
           <Main />
 
           <footer
-            className="py-0 my-0 text-center text-light mt-auto "
+            className="py-0 my-0 text-center text-light mt-auto d-none d-md-block"
             style={{ height: "60px" }}
           >
             <div className="mx-auto container-web d-flex justify-content-between my-auto bg-blue h-100 w-100 px-4 py-2">

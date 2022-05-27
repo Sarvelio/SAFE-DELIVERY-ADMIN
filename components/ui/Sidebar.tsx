@@ -28,9 +28,10 @@ export const Sidebar = ({ children }: { children: JSX.Element }) => {
   const [openMenu, setOpenMenu] = useState(true);
   const { asPath } = useRouter();
   const { isLoading } = useContext(UiContext);
+
   useEffect(() => {
-    console.log("{user}", user);
-  }, [user]);
+    setOpenMenu(false);
+  }, [asPath]);
 
   const urls =
     user?.rol == TYPE_ROLES.administrador
@@ -132,10 +133,7 @@ export const Sidebar = ({ children }: { children: JSX.Element }) => {
               <MenuOutlined sx={{ fontSize: 35, fill: "white" }} />
             </span>
           </div>
-          <div
-            className="position-absolute h-100 w-100"
-            // style={{ display: "contents" }}
-          >
+          <div className="position-absolute h-100 w-100">
             <div
               className={`position-absolute h-100 w-100 loading-spinner-div justify-content-center align-content-center ${
                 isLoading ? "d-flex" : "d-none"
